@@ -125,9 +125,10 @@ Step F: 压缩上下文（主上下文只保留"[日期] [科目] Phase 2 完成
 
 #### ✅ 成功经验
 
-1. **h3标题必须100%覆盖语义锚点**
-   - 所有以 `一、` `二、` `三、` 等开头的小节标题（h3），前面必须紧跟一个语义锚点 `<div id="科目-第X章-第X节-语义标签" class="section-anchor"></div>`。
-   - 遗漏任何一个h3锚点，都会导致目录点击无法跳转。
+1. **h3和h4标题必须100%覆盖语义锚点**
+   - 所有以 `一、` `二、` `三、` 等开头的小节标题（h3），前面必须紧跟一个语义锚点。
+   - 所有以 `（一）`、`（二）`、`（三）` 等开头的子小节标题（h4），前面**同样必须紧跟一个语义锚点**。
+   - **遗漏h3锚点会导致目录无法跳转；遗漏h4锚点会导致同级内容无法精准定位，用户体验断裂。**
 
 2. **层级修复的完整范围**
    - 不仅要把异常 `h1` 修复为 `h2/h3/h4/h5`，还要检查**开闭标签是否匹配**（如 `<h4>...< /h3>` 这种错误）。
@@ -154,7 +155,11 @@ Step F: 压缩上下文（主上下文只保留"[日期] [科目] Phase 2 完成
    - 早期仅靠LLM肉眼扫读，遗漏了5个缺锚点的h3标题、6个半角括号、多处ol乱用。
    - **铁律**：每节完成后必须用脚本自动化检查（见下文检查脚本），不能仅靠LLM肉眼。
 
-3. **标题层级修复不彻底引发连锁问题**
+3. **h4锚点被系统性遗漏（会计第1-6章审计发现）**
+   - 早期仅要求h3标题加锚点，导致第1-6章累计遗漏47个h4锚点。用户在手机上浏览时发现大量（一）（二）（三）内容无法精准跳转。
+   - **铁律**：h3和h4标题前面必须100%覆盖语义锚点，缺一不可。
+
+4. **标题层级修复不彻底引发连锁问题**
    - 第1章第4节 "一、会计要素定义及其确认条件" 原为 `<h1>` 开标签配 `</h3>` 闭标签，早期只修了开标签，导致渲染异常。
    - **铁律**：层级修复必须同时检查 `开标签级别 == 闭标签级别 == 实际语义级别`。
 
@@ -164,24 +169,32 @@ Step F: 压缩上下文（主上下文只保留"[日期] [科目] Phase 2 完成
 import re
 
 # 1. 检查所有 h3 标题前面是否有语义锚点
-missing_anchors = []
+missing_h3 = []
 for m in re.finditer(r'<h3 id="[^"]*">([一二三四五六七八九十]+[、．.][^<]+)</h3>', html):
     before = html[max(0, m.start()-200):m.start()]
     if 'section-anchor' not in before:
-        missing_anchors.append(m.group(1))
-assert len(missing_anchors) == 0, f"缺锚点的h3: {missing_anchors}"
+        missing_h3.append(m.group(1))
+assert len(missing_h3) == 0, f"缺锚点的h3: {missing_h3}"
 
-# 2. 检查标题开闭标签是否匹配
+# 2. 检查所有 h4 标题前面是否有语义锚点（2026-04-14新增）
+missing_h4 = []
+for m in re.finditer(r'<h4 id="[^"]*">（[一二三四五六七八九十]+）[、．.]?[^<]*</h4>', html):
+    before = html[max(0, m.start()-120):m.start()]
+    if 'section-anchor' not in before:
+        missing_h4.append(m.group(0))
+assert len(missing_h4) == 0, f"缺锚点的h4: {missing_h4}"
+
+# 3. 检查标题开闭标签是否匹配
 for m in re.finditer(r'(<h[1-5][^>]*>)(.*?)(</h[1-5]>)', html, re.DOTALL):
     open_level = m.group(1)[2]
     close_level = m.group(3)[3]
     assert open_level == close_level, f"层级不匹配: {m.group(0)[:50]}"
 
-# 3. 检查半角括号
+# 4. 检查半角括号
 bad_parens = re.findall(r'\([0-9]+[）\)]', html)
 assert len(bad_parens) == 0, f"半角括号残留: {bad_parens}"
 
-# 4. 检查 <ol> 乱用（例题步骤应改为 <p>（n）</p>）
+# 5. 检查 <ol> 乱用（例题步骤应改为 <p>（n）</p>）
 ol_tags = re.findall(r'<ol[^>]*>', html)
 assert len(ol_tags) == 0, f"ol 残留: {len(ol_tags)} 处"
 ```
