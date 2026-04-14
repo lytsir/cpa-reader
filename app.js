@@ -3,7 +3,7 @@
 const state = {
   subject: '会计',
   tocData: null,
-  sidebarOpen: false,
+  sidebarOpen: window.innerWidth > 768, // 桌面端默认展开
   sidebarPinned: false,
   resizerDragging: false,
   translatePanelWidth: 0.38, // 右栏占比（桌面端）
@@ -43,6 +43,7 @@ async function init() {
   if (els.translateToggle) els.translateToggle.addEventListener('click', openTranslatePanel);
   if (els.translateClose) els.translateClose.addEventListener('click', closeTranslatePanel);
   setupResizer();
+  updateSidebarUI();
 
   // 加载数据
   await loadTOCData();
@@ -168,9 +169,8 @@ function togglePin() {
   updateSidebarUI();
 }
 function updateSidebarUI() {
-  const open = state.sidebarOpen || (state.sidebarPinned && !isMobile());
-  els.sidebar.classList.toggle('open', open);
-  els.sidebarOverlay.classList.toggle('open', open && isMobile());
+  els.sidebar.classList.toggle('open', state.sidebarOpen);
+  els.sidebarOverlay.classList.toggle('open', state.sidebarOpen && isMobile());
 }
 
 function isMobile() {

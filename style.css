@@ -93,7 +93,17 @@ html, body {
   flex-direction: column;
   position: relative;
   z-index: 90;
-  transition: transform .25s ease;
+  transition: transform .25s ease, width .25s ease, min-width .25s ease;
+}
+
+/* 桌面端侧边栏隐藏 */
+@media (min-width: 769px) {
+  .sidebar:not(.open) {
+    width: 0;
+    min-width: 0;
+    border-right: none;
+    overflow: hidden;
+  }
 }
 
 .sidebar-header {
