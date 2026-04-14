@@ -171,6 +171,15 @@ Step F: 压缩上下文（主上下文只保留"[日期] [科目] Phase 2 完成
    - 会计第13章（金融工具与保险合同）长达18.4万字符，含有88处 `<ol>` 残留，手动逐一替换效率极低且易遗漏。最终通过脚本批量提取 `<li>` 内容并自动转换为 `<p>（n）</p>` 格式才完成清理。
    - **铁律**：当单章ol残留超过5处时，必须使用自动化批量替换脚本，禁止手动逐个处理。
 
+7. **h4下的`<p>（n）...`子标题被系统性遗漏为h5（会计第13章）**
+   - 会计第13章中存在大量h4标题下以 `<p>（1）...`、`<p>（2）...` 形式出现的子主题，它们本应和已有的h5标题并列，但被PDF转HTML错误降级为普通段落。例如 `（2）将混合合同指定为以公允价值计量且其变动计入当期损益的金融工具` 与 `h5: 1. 嵌入衍生工具的分拆` 是并列关系，却仍是 `<p>`。
+   - **判断标准**：位于h4下、以 `（n）` 开头、文本较短（<50字符）、后面跟着大量解释内容（>400字符），且与同h4下的其他h5呈并列结构。
+   - **铁律**：大章节处理完成后，必须用脚本扫描h4下的所有 `<p>（n）短文本</p>`，将符合标题特征的项批量提升为h5。
+
+8. **PDF转HTML导致的断行分裂需批量合并（会计第13章）**
+   - PDF转HTML时常将一行文字在关键词处（如`以及`、`除`、`或`、`一`、`项`、`形`、`如`、`资`、`产`）错误截断，分成两个 `<p>` 标签。例如：`计量的一` / `项或一组金融资产`、`风险敞口及其形` / `成原因`、`<p>（3）相关金融资产...属于衍生工具（...以及</p>` / `<p>被指定为...除外）</p>`。
+   - **铁律**：处理完成后必须用正则扫描上一 `<p>` 以截断词结尾、下一 `<p>` 明显接着同一句话的断行分裂，并批量合并为单个 `<p>`。
+
 #### 🔧 强制检查脚本（每节/每章完成后执行）
 
 ```python
@@ -213,6 +222,36 @@ assert len(bad_parens) == 0, f"半角括号残留: {bad_parens}"
 # 5. 检查 <ol> 乱用（例题步骤应改为 <p>（n）</p>）
 ol_tags = re.findall(r'<ol[^>]*>', html)
 assert len(ol_tags) == 0, f"ol 残留: {len(ol_tags)} 处"
+
+# 6. 检查h4下是否有遗漏的<h5>子标题（2026-04-16新增）
+# 当h4区块内同时存在h5和<p>（n）短文本时，短文本应提升为h5
+h4_positions = []
+for m in re.finditer(r'<h4[^>]*>', html):
+    h4_positions.append(m.end())
+for i, h4_end in enumerate(h4_positions):
+    block_end = len(html)
+    if i + 1 < len(h4_positions):
+        block_end = html.find('<h4', h4_end)
+    block = html[h4_end:block_end if block_end != -1 else len(html)]
+    has_h5 = '<h5' in block
+    if has_h5:
+        for m in re.finditer(r'<p>（([0-9]+)）([^<]{0,50})</p>', block):
+            text = m.group(2).strip()
+            after = block[m.end():]
+            next_heading = re.search(r'<h[1-6]', after)
+            dist = len(after)
+            if next_heading:
+                dist = next_heading.start()
+            if len(text) < 45 and not text.endswith(('。', '了', '等', '：')) and dist > 400:
+                assert False, f"h4下遗漏h5: {m.group(0)}"
+
+# 7. 检查断行分裂（2026-04-16新增）
+# 上一<p>以截断词结尾，下一<p>接着同一句话
+split_fragments = re.findall(
+    r'<p>[^<]*(?:以及|除|或|一|项|形|如|资|产|工|具)</p>\n<p>[^<]{2,}</p>',
+    html
+)
+assert len(split_fragments) == 0, f"断行分裂残留: {len(split_fragments)} 处"
 ```
 
 **任何一项检查未通过，禁止提交GitHub，禁止请求用户确认。**
