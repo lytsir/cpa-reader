@@ -1,0 +1,18 @@
+# 临时文件
+*.tmp
+*.temp
+.DS_Store
+._*
+
+# 旧文件和废弃内容
+.deprecated/
+source/
+output/*.md
+
+# 大文件（由用户单独上传）
+metadata/*_带锚点.html
+frontend/metadata/*_带锚点.html
+
+# IDE
+.vscode/
+.idea/
