@@ -20,6 +20,8 @@ const els = {
   resizer: document.getElementById('resizer'),
   translatePanel: document.getElementById('translate-panel'),
   translateContent: document.getElementById('translate-content'),
+  translateToggle: document.getElementById('translate-toggle'),
+  translateClose: document.getElementById('translate-close'),
 };
 
 /* ===== 初始化 ===== */
@@ -38,6 +40,8 @@ async function init() {
   els.menuToggle.addEventListener('click', toggleSidebar);
   els.sidebarOverlay.addEventListener('click', closeSidebar);
   els.pinToggle.addEventListener('click', togglePin);
+  if (els.translateToggle) els.translateToggle.addEventListener('click', openTranslatePanel);
+  if (els.translateClose) els.translateClose.addEventListener('click', closeTranslatePanel);
   setupResizer();
 
   // 加载数据
@@ -76,11 +80,14 @@ async function loadSubject(subject) {
   // 渲染目录
   renderTOC(subject);
 
-  // 加载完整HTML
+  // 加载完整HTML（提取body内容）
   try {
     const res = await fetch(`metadata/${subject}_带锚点.html?v=${Date.now()}`);
     const htmlText = await res.text();
-    els.originalContent.innerHTML = htmlText;
+    // 提取body内容（完整HTML文档不能直接innerHTML）
+    const bodyMatch = htmlText.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+    const content = bodyMatch ? bodyMatch[1] : htmlText;
+    els.originalContent.innerHTML = content;
   } catch (e) {
     console.error('加载原文失败', e);
     els.originalContent.innerHTML = '<div class="placeholder">加载原文失败，请检查网络后刷新</div>';
@@ -170,6 +177,15 @@ function isMobile() {
   return window.innerWidth <= 768;
 }
 
+/* ===== 大白话面板控制 ===== */
+function openTranslatePanel() {
+  if (!isMobile()) return;
+  els.translatePanel.classList.add('open');
+}
+function closeTranslatePanel() {
+  els.translatePanel.classList.remove('open');
+}
+
 /* ===== 分隔线拖动 ===== */
 function setupResizer() {
   if (!els.resizer || !els.translatePanel) return;
@@ -217,8 +233,10 @@ function setupResizer() {
 window.addEventListener('resize', () => {
   updateSidebarUI();
   if (!isMobile() && els.translatePanel) {
+    // 桌面端：重置样式，关闭大白话面板
     els.translatePanel.style.width = '';
     els.translatePanel.style.flex = '';
+    els.translatePanel.classList.remove('open');
   }
 });
 

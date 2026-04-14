@@ -21,7 +21,10 @@
           <option value="税法">税法</option>
         </select>
       </div>
-      <h1 class="app-title">CPA大白话</h1>
+      <div class="right-controls">
+        <button id="translate-toggle" class="icon-btn" aria-label="大白话">💬</button>
+        <h1 class="app-title desktop-only">CPA大白话</h1>
+      </div>
     </header>
 
     <!-- 主体三栏 -->
@@ -48,7 +51,10 @@
 
       <!-- 右栏：大白话 -->
       <section id="translate-panel" class="translate-panel">
-        <div class="panel-header">大白话解读</div>
+        <div class="panel-header">
+          <span>大白话解读</span>
+          <button id="translate-close" class="icon-btn mobile-only" aria-label="关闭">✕</button>
+        </div>
         <div id="translate-content" class="translate-content">
           <div class="placeholder">加载中...</div>
         </div>

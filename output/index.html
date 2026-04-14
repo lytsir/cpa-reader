@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA三栏阅读器 · 六科完整精修版</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #f8f9fa; color: #333; line-height: 1.8; }
+header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 80px 20px; text-align: center; }
+header h1 { font-size: 3rem; margin-bottom: 15px; }
+header p { font-size: 1.3rem; opacity: 0.9; }
+.container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+.subjects { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 25px; }
+.subject-card { background: white; border-radius: 20px; padding: 35px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: all 0.3s; text-decoration: none; color: inherit; }
+.subject-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
+.subject-icon { font-size: 3rem; margin-bottom: 15px; }
+.subject-name { font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; }
+.subject-count { color: #666; font-size: 1rem; }
+.subject-btn { display: inline-block; margin-top: 20px; padding: 12px 35px; border-radius: 25px; color: white; font-weight: 500; text-decoration: none; }
+.total-bar { text-align: center; margin-top: 50px; padding: 30px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.total-bar h2 { font-size: 1.5rem; color: #444; }
+.total-bar .number { font-size: 2.5rem; font-weight: 700; color: #667eea; margin: 10px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>CPA三栏阅读器</h1>
+  <p>六科完整精修版 · 大白话解读 · 原文对照</p>
+</header>
+<div class="container">
+  <div class="subjects">
+    <a href="会计_完整精修版.html" class="subject-card">
+      <div class="subject-icon">📘</div>
+      <div class="subject-name">会计</div>
+      <div class="subject-count">1811 篇文章</div>
+      <div class="subject-btn" style="background: linear-gradient(135deg, #667eea, #764ba2);">开始学习</div>
+    </a>
+    <a href="审计_完整精修版.html" class="subject-card">
+      <div class="subject-icon">📗</div>
+      <div class="subject-name">审计</div>
+      <div class="subject-count">1731 篇文章</div>
+      <div class="subject-btn" style="background: linear-gradient(135deg, #11998e, #38ef7d);">开始学习</div>
+    </a>
+    <a href="财管_完整精修版.html" class="subject-card">
+      <div class="subject-icon">📕</div>
+      <div class="subject-name">财管</div>
+      <div class="subject-count">1319 篇文章</div>
+      <div class="subject-btn" style="background: linear-gradient(135deg, #f093fb, #f5576c);">开始学习</div>
+    </a>
+    <a href="税法_完整精修版.html" class="subject-card">
+      <div class="subject-icon">📙</div>
+      <div class="subject-name">税法</div>
+      <div class="subject-count">1550 篇文章</div>
+      <div class="subject-btn" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">开始学习</div>
+    </a>
+    <a href="经济法_完整精修版.html" class="subject-card">
+      <div class="subject-icon">📓</div>
+      <div class="subject-name">经济法</div>
+      <div class="subject-count">2005 篇文章</div>
+      <div class="subject-btn" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">开始学习</div>
+    </a>
+    <a href="战略_完整精修版.html" class="subject-card">
+      <div class="subject-icon">📒</div>
+      <div class="subject-name">战略</div>
+      <div class="subject-count">1094 篇文章</div>
+      <div class="subject-btn" style="background: linear-gradient(135deg, #fa709a, #fee140);">开始学习</div>
+    </a>
+  </div>
+  <div class="total-bar">
+    <h2>累计精修文章</h2>
+    <div class="number">9510 篇</div>
+    <p>六科全部完成，可直接打开各科HTML文件离线浏览</p>
+  </div>
+</div>
+</body>
+</html>

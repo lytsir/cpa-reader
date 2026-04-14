@@ -35,6 +35,13 @@ html, body {
   align-items: center;
   gap: 10px;
 }
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mobile-only { display: none; }
+.desktop-only { display: block; }
 
 .icon-btn {
   width: 36px;
@@ -209,6 +216,9 @@ html, body {
 }
 
 .panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 12px 14px;
   font-weight: 600;
   font-size: 15px;
@@ -241,6 +251,8 @@ html, body {
   .top-bar { padding: 0 10px; }
   .app-title { font-size: 15px; }
   #subject-select { max-width: 120px; font-size: 14px; }
+  .mobile-only { display: flex; }
+  .desktop-only { display: none; }
 
   .sidebar {
     position: absolute;
@@ -261,6 +273,11 @@ html, body {
 
   .resizer { display: none; }
 
+  .original-panel {
+    width: 100%;
+    flex: none;
+  }
+
   .translate-panel {
     position: absolute;
     right: 0;
@@ -275,8 +292,6 @@ html, body {
   .translate-panel.open {
     transform: translateX(0);
   }
-
-  /* 手机端默认只看原文，大白话通过按钮打开（后续扩展） */
 }
 
 /* ===== 响应式：小屏手机 ===== */
