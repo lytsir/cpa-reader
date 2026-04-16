@@ -560,7 +560,9 @@ def find_splits(block):
 1. `<br />` 在分录中：**必须拆分为独立 `<p>`**（每个借/贷/中间科目一行）
 2. 同一 `<p>` 内同时出现 `借[:：]` 和 `贷[:：]`：**必须拆分为独立 `<p>`**
 3. math 标签与"贷"/"借"字粘连：检查并修复 HTML 结构
-4. 分录条目（借/贷/中间科目）与金额被拆到不同 `<p>`：**必须合并到同一 `<p>`**
+4. **MathML inline 导致混合分录**：math 标签横跨借/贷边界，或金额数字与 `贷：` 字粘连在同一 `<p>` 内。必须将 math 提取为纯文本金额，并将借、贷拆分为独立 `<p>`。
+5. 分录条目（借/贷/中间科目）与金额被拆到不同 `<p>`：**必须合并到同一 `<p>`**
+6. 表格化分录：`<table>` 包裹的会计分录必须逐条由 LLM 判断后转为 `<p>` 格式（详见 5.10）
 
 **检测脚本**：
 ```python
@@ -617,6 +619,72 @@ for i in range(len(tables)-1):
         table2 = tables[i+1].group(0)
         if 'rowspan' in table2 or 'colspan' in table2 or '<th>' in table2:
             flag(f'表格可能拆分: 第{i+1}与{i+2}个table之间="{between_text}"')
+```
+
+### 5.9 表格 CSS 渲染规范（2026-04-17新增）
+
+> 基于表9-1/表9-2（含 rowspan/colspan 的复杂表格）渲染异常修复经验。
+
+**问题定义**：
+1. **`table-layout: fixed` 对复杂表格是灾难性的**：对 `tbody`/`tr` 强制 `display: table; width: 100%; table-layout: fixed` 会导致浏览器对有 `rowspan`/`colspan` 的表格进行**等宽列分配**，使跨行单元格（如"柜式空调生产车间"）被严重挤压，内容堆叠、边框错位。
+2. **`display: block` + `overflow-x: auto` 直接作用于 `<table>`**：会破坏表格的正常流式布局算法，导致 rowspan 渲染异常。
+3. **单元格文字溢出**：部分表头或数据单元格内容过长（如公式说明 `②=期初③×7.82%`），超出单元格后不可读。
+
+**CSS 规范（强制）**：
+```css
+/* 横向滚动应由原文容器提供，而非 table 自身 */
+.original-content {
+  overflow-x: auto;  /* 允许超宽内容横向滚动 */
+}
+
+/* table 保持原生 display: table，不强制 fixed layout */
+.original-content table {
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+
+/* 数据单元格允许自动换行，防止溢出 */
+.original-content td {
+  word-break: break-all;
+}
+
+/* 表头尽量保持语义完整 */
+.original-content th {
+  word-break: keep-all;
+}
+```
+
+### 5.10 表格化分录识别与转换规范（2026-04-17新增）
+
+> 基于全书 10 个被 `<table>` 错误包裹的会计分录修复经验。
+
+**问题定义**：PDF转HTML时，部分会计分录被转换为两列 `<table>`（左列科目、右列金额），丢失了分录的段落语义，且在大白话同步滚动和格式渲染上均不正常。
+
+**LLM 识别标准**（同时满足）：
+1. `<table>` 内同时包含"借"和"贷"
+2. 无正常表头（如"日期"、"项目"、"年份"、"科目名称"、"逾期情况"等）
+3. 行数 ≤ 30（超长表格通常为正常数据表）
+
+**转换规则**：
+1. **逐条精确替换**：不得用正则批量替换所有含借/贷的 table，必须提取完整 HTML，人工（LLM）确认后再替换。
+2. **保留续行缩进语义**：原表格中以 `——` 开头的续行（如 `——利息调整 50 501`）在转为 `<p>` 后应保持 `——` 前缀，以维持视觉层级。
+3. **补全缺失的借贷前缀**：表格中部分中间行可能缺少"借："或"贷："前缀（因为原 table 将前缀放在首行），转换后不应盲目补全，应保持原文空格缩进习惯；但如果上下文明确属于借方/贷方续行，可保持原样。
+4. **非分录文字单独成行**：表格中夹杂的说明文字（如 `"实际支付利息时："`、`"同时或资产负债表日,账务处理如下:"`）应转为普通 `<p>`，不包入分录行。
+5. **大分录分段处理**：超过 20 行的超大分录表格，转换后应按原有空行/说明文字自然分段。
+
+**检测脚本**：
+```python
+journal_tables = []
+for m in re.finditer(r'<table>.*?</table>', block, re.DOTALL):
+    table_html = m.group(0)
+    text = re.sub(r'<[^>]+>', '', table_html).strip()
+    has_header = any(k in text for k in ['日期', '项目', '说明', '摘要', '单位', 
+        '期初', '期末', '年份', '股东', '逾期情况', '科目名称', '期初摊余成本'])
+    is_journal = '借' in text and '贷' in text and not has_header
+    rows = re.findall(r'<tr>(.*?)</tr>', table_html, re.DOTALL)
+    if is_journal and len(rows) <= 30:
+        journal_tables.append((m.start(), len(rows), table_html))
+        flag(f'疑似表格化分录: 位置={m.start()} 行数={len(rows)}')
 ```
 
 ---
