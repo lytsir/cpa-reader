@@ -174,17 +174,15 @@ html, body {
 .original-content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: auto;
   padding: 16px;
   line-height: 1.75;
 }
 
 /* 原文内的表格样式：带边框线 + 横向滚动 */
 .original-content table {
-  display: block;
-  overflow-x: auto;
   border-collapse: collapse;
   margin: 12px 0;
-  max-width: 100%;
 }
 .original-content th,
 .original-content td {
