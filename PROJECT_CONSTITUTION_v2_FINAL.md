@@ -272,17 +272,30 @@ for m in re.finditer(r'<p><math display="block"[^>]*>.*?</math></p>', html, re.D
     assert not re.search(r'借[:：]|贷[:：]|会计分录|账务处理', before), \
         f"会计分录中存在block math残留: {m.group(0)[:100]}"
 
-# 9. 检查例题编号错乱（2026-04-16新增）
+# 9. 检查例题编号错乱（2026-04-16第三次升级）
+# 说明：例题范围内可能包含多个独立的ol列表（如例题步骤+合并工作底稿说明+政策条文），
+# 每个列表有自己的(1)(2)(3)编号。因此"编号重复重置"只在短范围内（≤5项）且无明显分隔时报警。
 examples = re.finditer(r'\[例(\d{2}-\d+)\](.*?)(?=\[例|\n<h[1-6]|</div><div id="会计-第)', html, re.DOTALL)
 for m in examples:
     ex_id = m.group(1)
-    nums = re.findall(r'<p>（([0-9]+)）', m.group(2))
+    segment = m.group(2)
+    nums = re.findall(r'<p>（([0-9]+)）', segment)
     int_nums = [int(n) for n in nums]
     for i in range(1, len(int_nums)):
-        assert not (int_nums[i] == 1 and int_nums[i-1] > 1), \
-            f"[例{ex_id}] 编号重复重置: {int_nums}"
+        # 编号跳跃：始终视为错误（如 1,2,6）
         assert not (int_nums[i] > int_nums[i-1] + 1), \
             f"[例{ex_id}] 编号跳跃: {int_nums}"
+        # 编号重复重置：仅在短序列（≤5项）且无明显分隔时报警
+        if int_nums[i] == 1 and int_nums[i-1] > 1 and len(int_nums) <= 5:
+            all_matches = list(re.finditer(r'<p>（([0-9]+)）', segment))
+            if i < len(all_matches):
+                before_pos = all_matches[i].start()
+                before_ctx = segment[max(0, before_pos-300):before_pos]
+                has_separator = ('<table>' in before_ctx or '</table>' in before_ctx or 
+                                 '合并工作底稿' in before_ctx or '账务处理' in before_ctx or
+                                 '<h3' in before_ctx or '<h4' in before_ctx or '<h5' in before_ctx)
+                assert has_separator, \
+                    f"[例{ex_id}] 编号重复重置（无分隔）: {int_nums}"
 
 # 10. 检查h5误升级（例题步骤被提升为h5）（2026-04-16新增）
 for m in re.finditer(r'<h5[^>]*>（[0-9]+）[）)．.\s]*[^<]{3,40}</h5>', html):
