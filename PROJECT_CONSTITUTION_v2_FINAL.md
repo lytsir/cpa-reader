@@ -245,12 +245,24 @@ for i, h4_end in enumerate(h4_positions):
             if len(text) < 45 and not text.endswith(('。', '了', '等', '：')) and dist > 400:
                 assert False, f"h4下遗漏h5: {m.group(0)}"
 
-# 7. 检查断行分裂（2026-04-16新增）
+# 7. 检查断行分裂（2026-04-16新增，2026-04-16二次升级）
 split_fragments = re.findall(
-    r'<p>[^<]*(?:以及|除|或|一|项|形|如|资|产|工|具|可|的|纳|差|以)</p>\n<p>[^<]{2,}</p>',
+    r'<p>[^<]*(?:以及|除|或|一|项|形|如|资|产|工|具|可|的|纳|差|以|计|定|准|理)</p>\n<p>[^<]{2,}</p>',
     html
 )
-assert len(split_fragments) == 0, f"断行分裂残留: {len(split_fragments)} 处"
+real_splits = []
+for s in split_fragments:
+    lines = s.split('\n')
+    first_text = re.sub(r'<[^>]+>', '', lines[0]).strip()
+    second_text = re.sub(r'<[^>]+>', '', lines[1]).strip()
+    if re.match(r'^(借|贷)[:：]', first_text) and re.match(r'^\d', second_text):
+        continue
+    if re.match(r'^(例如|如果|然而|此外|同时|因此|但是|需要注意的是|一是|二是|首先|其次|再次|最后)', second_text):
+        continue
+    if first_text.endswith(('。', '：', '；', '，', '、', '”')):
+        continue
+    real_splits.append(s)
+assert len(real_splits) == 0, f"断行分裂残留: {len(real_splits)} 处"
 
 # 8. 检查 block math 在会计分录中的残留（2026-04-16新增）
 for m in re.finditer(r'<p><math display="block"[^>]*>.*?</math></p>', html, re.DOTALL):
@@ -443,7 +455,7 @@ for m in re.finditer(r'<h5[^>]*>（[0-9]+）[）)．.\s]*[^<]{3,40}</h5>', block
 **升级检测逻辑**：
 ```python
 def find_splits(block):
-    pattern = r'<p>([^<]*?)(以及|除|或|一|项|形|如|资|产|工|具|可|的|纳|差|以)</p>\n<p>([^<]{2,})</p>'
+    pattern = r'<p>([^<]*?)(以及|除|或|一|项|形|如|资|产|工|具|可|的|纳|差|以|计|定|准|理)</p>\n<p>([^<]{2,})</p>'
     for m in re.finditer(pattern, block):
         first = re.sub(r'<[^>]+>', '', m.group(1)).strip()
         sep = m.group(2)
@@ -454,9 +466,9 @@ def find_splits(block):
             continue
         if first.endswith(('。', '：', '；', '，', '、', '”')):
             continue
-        if sep == '的' and not second.startswith(('是', '确', '原', '基', '结', '情')):
+        if sep == '的' and not second.startswith(('是', '确', '原', '基', '结', '情', '价', '成')):
             yield m
-        elif sep in ['可', '以', '除', '或', '项', '形', '如', '资', '产', '工', '具', '纳', '差']:
+        elif sep in ['可', '以', '除', '或', '项', '形', '如', '资', '产', '工', '具', '纳', '差', '计', '定', '准', '理']:
             yield m
 ```
 
