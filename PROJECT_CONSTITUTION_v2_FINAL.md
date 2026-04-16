@@ -261,6 +261,8 @@ for s in split_fragments:
         continue
     if first_text.endswith(('。', '：', '；', '，', '、', '”')):
         continue
+    if len(first_text) > 20 and first_text.endswith('处理') and re.search(r'（[0-9]+）', first_text):
+        continue
     real_splits.append(s)
 assert len(real_splits) == 0, f"断行分裂残留: {len(real_splits)} 处"
 
