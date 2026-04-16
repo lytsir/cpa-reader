@@ -3,10 +3,13 @@
 const state = {
   subject: '会计',
   tocData: null,
-  sidebarOpen: window.innerWidth > 768, // 桌面端默认展开
+  sidebarOpen: window.innerWidth > 768,
   sidebarPinned: false,
   resizerDragging: false,
-  translatePanelWidth: 0.38, // 右栏占比（桌面端）
+  translatePanelWidth: 0.38,
+  translateData: {},
+  currentAnchor: null,
+  anchorElements: [],
 };
 
 const els = {
@@ -26,7 +29,6 @@ const els = {
 
 /* ===== 初始化 ===== */
 async function init() {
-  // 读取URL参数或localStorage的科目
   const urlParams = new URLSearchParams(window.location.search);
   const urlSubject = urlParams.get('subject');
   const savedSubject = localStorage.getItem('cpa-subject');
@@ -35,7 +37,6 @@ async function init() {
 
   els.subjectSelect.value = state.subject;
 
-  // 事件绑定
   els.subjectSelect.addEventListener('change', onSubjectChange);
   els.menuToggle.addEventListener('click', toggleSidebar);
   els.sidebarOverlay.addEventListener('click', closeSidebar);
@@ -45,7 +46,6 @@ async function init() {
   setupResizer();
   updateSidebarUI();
 
-  // 加载数据
   await loadTOCData();
   await loadSubject(state.subject);
 }
@@ -65,7 +65,6 @@ async function loadTOCData() {
 function onSubjectChange() {
   state.subject = els.subjectSelect.value;
   localStorage.setItem('cpa-subject', state.subject);
-  // 更新URL
   const url = new URL(window.location);
   url.searchParams.set('subject', state.subject);
   window.history.replaceState({}, '', url);
@@ -74,18 +73,15 @@ function onSubjectChange() {
 
 /* ===== 加载指定科目 ===== */
 async function loadSubject(subject) {
-  // 清空中栏
   els.originalContent.innerHTML = '<div class="placeholder">正在加载教材...</div>';
   els.translateContent.innerHTML = '<div class="placeholder">请先选择目录开始学习</div>';
 
-  // 渲染目录
   renderTOC(subject);
 
-  // 加载完整HTML（提取body内容）
+  // 加载原文
   try {
     const res = await fetch(`metadata/${subject}_带锚点.html?v=${Date.now()}`);
     const htmlText = await res.text();
-    // 提取body内容（完整HTML文档不能直接innerHTML）
     const bodyMatch = htmlText.match(/<body[^>]*>([\s\S]*)<\/body>/i);
     const content = bodyMatch ? bodyMatch[1] : htmlText;
     els.originalContent.innerHTML = content;
@@ -95,10 +91,100 @@ async function loadSubject(subject) {
     return;
   }
 
+  // 加载大白话索引
+  try {
+    const transRes = await fetch(`metadata/${subject}_大白话索引.json?v=${Date.now()}`);
+    state.translateData[subject] = await transRes.json();
+  } catch (e) {
+    state.translateData[subject] = {};
+  }
+
+  // 获取锚点并绑定滚动监听
+  state.anchorElements = Array.from(els.originalContent.querySelectorAll('.section-anchor'));
+  state.currentAnchor = null;
+  els.originalContent.removeEventListener('scroll', onOriginalScroll);
+  els.originalContent.addEventListener('scroll', onOriginalScroll);
+
   // 默认滚动到第一章
   setTimeout(() => {
     scrollToAnchor(`${subject}-第1章`);
   }, 50);
+}
+
+/* ===== 大白话加载 ===== */
+function loadTranslate(anchorId) {
+  const data = state.translateData[state.subject] || {};
+  const content = data[anchorId];
+  if (content) {
+    els.translateContent.innerHTML = `<div class="translate-section">${escapeHtml(content).replace(/\n/g, '<br>')}</div>`;
+  } else {
+    els.translateContent.innerHTML = `<div class="placeholder">暂无大白话解读，敬请期待</div>`;
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+/* ===== 滚动监听 ===== */
+const onOriginalScroll = throttle(updateActiveAnchor, 120);
+
+function updateActiveAnchor() {
+  if (!state.anchorElements.length) return;
+  const container = els.originalContent;
+  const scrollTop = container.scrollTop;
+
+  let bestAnchor = state.anchorElements[0];
+  for (const el of state.anchorElements) {
+    const top = el.offsetTop - container.offsetTop;
+    if (top <= scrollTop + 24) {
+      bestAnchor = el;
+    } else {
+      break;
+    }
+  }
+
+  if (bestAnchor.id !== state.currentAnchor) {
+    state.currentAnchor = bestAnchor.id;
+    loadTranslate(bestAnchor.id);
+    syncTOCHighlight(bestAnchor.id);
+  }
+}
+
+function throttle(fn, wait) {
+  let lastTime = 0;
+  return function (...args) {
+    const now = Date.now();
+    if (now - lastTime >= wait) {
+      lastTime = now;
+      fn.apply(this, args);
+    }
+  };
+}
+
+/* ===== 目录高亮同步 ===== */
+function syncTOCHighlight(anchorId) {
+  let bestItem = null;
+  let bestScore = -1;
+
+  document.querySelectorAll('.toc-item').forEach(item => {
+    item.classList.remove('active');
+    const itemAnchor = item.dataset.anchor || '';
+    if (anchorId === itemAnchor) {
+      bestItem = item;
+      bestScore = 1000;
+    } else if (anchorId.startsWith(itemAnchor + '-')) {
+      const score = itemAnchor.length;
+      if (score > bestScore) {
+        bestScore = score;
+        bestItem = item;
+      }
+    }
+  });
+
+  if (bestItem) bestItem.classList.add('active');
 }
 
 /* ===== 渲染目录（章→节两级） ===== */
@@ -110,8 +196,7 @@ function renderTOC(subject) {
     return;
   }
 
-  data.chapters.forEach((ch, chIdx) => {
-    // 章
+  data.chapters.forEach((ch) => {
     const chItem = document.createElement('div');
     chItem.className = 'toc-item chapter';
     chItem.textContent = ch.title;
@@ -123,7 +208,6 @@ function renderTOC(subject) {
     });
     els.tocTree.appendChild(chItem);
 
-    // 节
     ch.sections.forEach((sec) => {
       const secItem = document.createElement('div');
       secItem.className = 'toc-item section';
@@ -146,6 +230,8 @@ function scrollToAnchor(anchor) {
   const container = els.originalContent;
   const top = el.offsetTop - container.offsetTop - 12;
   container.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  loadTranslate(anchor);
+  syncTOCHighlight(anchor);
 }
 
 /* ===== 高亮目录项 ===== */
@@ -179,7 +265,6 @@ function isMobile() {
 
 /* ===== 大白话面板控制 ===== */
 function openTranslatePanel() {
-  if (!isMobile()) return;
   els.translatePanel.classList.add('open');
 }
 function closeTranslatePanel() {
@@ -210,9 +295,8 @@ function setupResizer() {
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const containerWidth = document.querySelector('.main-container').clientWidth;
     const sidebarWidth = els.sidebar.clientWidth;
-    const availableWidth = containerWidth - sidebarWidth - 8; // 减去分隔线
+    const availableWidth = containerWidth - sidebarWidth - 8;
     let newWidth = containerWidth - clientX;
-    // 限制范围
     newWidth = Math.max(200, Math.min(newWidth, availableWidth * 0.65));
     els.translatePanel.style.width = newWidth + 'px';
     els.translatePanel.style.flex = 'none';
@@ -233,7 +317,6 @@ function setupResizer() {
 window.addEventListener('resize', () => {
   updateSidebarUI();
   if (!isMobile() && els.translatePanel) {
-    // 桌面端：重置样式，关闭大白话面板
     els.translatePanel.style.width = '';
     els.translatePanel.style.flex = '';
     els.translatePanel.classList.remove('open');
