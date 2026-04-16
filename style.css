@@ -192,11 +192,12 @@ html, body {
   vertical-align: top;
   font-size: 14.5px;
   line-height: 1.6;
-  white-space: nowrap;
+  word-break: break-all;
 }
 .original-content th {
   background: #f7f8fa;
   font-weight: 600;
+  word-break: keep-all;
 }
 .original-content tr:nth-child(even) {
   background: #fafafa;
