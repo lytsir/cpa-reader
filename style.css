@@ -182,17 +182,9 @@ html, body {
 .original-content table {
   display: block;
   overflow-x: auto;
-  white-space: nowrap;
   border-collapse: collapse;
-  width: 100%;
   margin: 12px 0;
-}
-.original-content table thead,
-.original-content table tbody,
-.original-content table tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
+  max-width: 100%;
 }
 .original-content th,
 .original-content td {
@@ -202,6 +194,7 @@ html, body {
   vertical-align: top;
   font-size: 14.5px;
   line-height: 1.6;
+  white-space: nowrap;
 }
 .original-content th {
   background: #f7f8fa;
