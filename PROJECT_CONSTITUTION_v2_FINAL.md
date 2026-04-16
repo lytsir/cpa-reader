@@ -246,12 +246,35 @@ for i, h4_end in enumerate(h4_positions):
                 assert False, f"h4下遗漏h5: {m.group(0)}"
 
 # 7. 检查断行分裂（2026-04-16新增）
-# 上一<p>以截断词结尾，下一<p>接着同一句话
 split_fragments = re.findall(
-    r'<p>[^<]*(?:以及|除|或|一|项|形|如|资|产|工|具)</p>\n<p>[^<]{2,}</p>',
+    r'<p>[^<]*(?:以及|除|或|一|项|形|如|资|产|工|具|可|的|纳|差|以)</p>\n<p>[^<]{2,}</p>',
     html
 )
 assert len(split_fragments) == 0, f"断行分裂残留: {len(split_fragments)} 处"
+
+# 8. 检查 block math 在会计分录中的残留（2026-04-16新增）
+for m in re.finditer(r'<p><math display="block"[^>]*>.*?</math></p>', html, re.DOTALL):
+    before = html[max(0, m.start()-150):m.start()]
+    assert not re.search(r'借[:：]|贷[:：]|会计分录|账务处理', before), \
+        f"会计分录中存在block math残留: {m.group(0)[:100]}"
+
+# 9. 检查例题编号错乱（2026-04-16新增）
+examples = re.finditer(r'\[例(\d{2}-\d+)\](.*?)(?=\[例|\n<h[1-6]|</div><div id="会计-第)', html, re.DOTALL)
+for m in examples:
+    ex_id = m.group(1)
+    nums = re.findall(r'<p>（([0-9]+)）', m.group(2))
+    int_nums = [int(n) for n in nums]
+    for i in range(1, len(int_nums)):
+        assert not (int_nums[i] == 1 and int_nums[i-1] > 1), \
+            f"[例{ex_id}] 编号重复重置: {int_nums}"
+        assert not (int_nums[i] > int_nums[i-1] + 1), \
+            f"[例{ex_id}] 编号跳跃: {int_nums}"
+
+# 10. 检查h5误升级（例题步骤被提升为h5）（2026-04-16新增）
+for m in re.finditer(r'<h5[^>]*>（[0-9]+）[）)．.\s]*[^<]{3,40}</h5>', html):
+    before = html[max(0, m.start()-200):m.start()]
+    assert '[例' not in before and '账务处理如下' not in before and '会计分录' not in before, \
+        f"h5误升级: {m.group(0)}"
 ```
 
 **任何一项检查未通过，禁止提交GitHub，禁止请求用户确认。**
@@ -346,7 +369,125 @@ Step 8: 下一节
 
 ---
 
-## 5. 异常处理规则
+## 5. 结构级质量审计规范（2026-04-16新增）
+
+> 基于会计第19-22章修复实战，对PDF转HTML导致的系统性结构问题建立检测和修复标准。
+
+### 5.1 例题编号错乱审计
+
+**问题定义**：PDF转HTML时，例题 `[例XX-XX]` 内部的 `（1）（2）（3）...` 编号经常出现重复、跳跃、缺失。
+
+**检测脚本标准**：
+```python
+import re
+examples = re.finditer(r'\[例(\d{2}-\d+)\](.*?)(?=\[例|\n<h[1-6]|</div><div id="会计-第)', block, re.DOTALL)
+for m in examples:
+    ex_id = m.group(1)
+    nums = re.findall(r'<p>（([0-9]+)）', m.group(2))
+    int_nums = [int(n) for n in nums]
+    for i in range(1, len(int_nums)):
+        if int_nums[i] == 1 and int_nums[i-1] > 1:
+            flag(f'[例{ex_id}] 编号重复重置: {int_nums}')
+        if int_nums[i] > int_nums[i-1] + 1:
+            flag(f'[例{ex_id}] 编号跳跃: {int_nums}')
+```
+
+**修复决策树**：
+1. **先由LLM阅读原文**：判断这些 `（n）` 是否属于**同一例题内部的连续步骤**。
+2. 如果是同一例题步骤 → **强制修复为连续编号**（1,2,3...）。
+3. 如果是**层级嵌套**（如 h4 原则下的 `（1）` 与例题分析的 `（1）` 之间）→ **保持原文结构，不修改编号**。
+4. **严禁机械统一**：脚本只能标红，修复动作必须LLM确认。
+
+### 5.2 会计分录 MathML 规范化
+
+**问题定义**：PDF转HTML时，会计分录中的金额和计算式被包裹在 `<math display="block">` 中，导致数字和运算符被垂直堆叠显示为乱码（如 `[2 0 0 0 0 × (6. 4 5 - 6. 2)] 5 0 0 0`）。
+
+**判定标准**：满足以下任一条件，该 `math` 标签必须被替换为纯文本：
+1. 位于 `<p>借：xxx</p>` 或 `<p>贷：xxx</p>` 的**下一段落**中
+2. annotation 文本中包含 `借`、`贷`、`×`、`%`、`[数字]` 等会计计算符号
+3. `display="block"` 且前后文为会计分录结构
+
+**修复标准格式**：
+```html
+<!-- 错误 -->
+<p>借：长期借款——美元</p>
+<p><math display="block">[20000×(6.45-6.2)] 5000</math></p>
+<p>贷：在建工程</p>
+<p>5000</p>
+
+<!-- 正确 -->
+<p>借：长期借款——美元 [20000×(6.45-6.2)] 5000</p>
+<p>贷：在建工程 5000</p>
+```
+
+**强制要求**：必须扫描并清零 block math 在会计分录中的使用。
+
+### 5.3 h5/p 边界判定规则
+
+| 元素 | 使用场景 | 禁用场景 |
+|------|---------|---------|
+| `<h5>` | 章-节-小节下的**主题分段标题**（如"1. 以公允价值为基础计量的"） | 例题内部的 `（n）步骤说明` |
+| `<p>` | 例题内部的步骤说明、分录、分析文字 | 作为主题分段标题使用 |
+
+**检测脚本**：
+```python
+# h5误升级检查
+for m in re.finditer(r'<h5[^>]*>（[0-9]+）[）)．.\s]*[^<]{3,40}</h5>', block):
+    before = block[max(0, m.start()-200):m.start()]
+    if '[例' in before or '账务处理如下' in before or '会计分录' in before:
+        flag('h5误升级：例题步骤被提升为h5')
+```
+
+### 5.4 断行分裂（断句）扫描规则
+
+**升级检测逻辑**：
+```python
+def find_splits(block):
+    pattern = r'<p>([^<]*?)(以及|除|或|一|项|形|如|资|产|工|具|可|的|纳|差|以)</p>\n<p>([^<]{2,})</p>'
+    for m in re.finditer(pattern, block):
+        first = re.sub(r'<[^>]+>', '', m.group(1)).strip()
+        sep = m.group(2)
+        second = re.sub(r'<[^>]+>', '', m.group(3)).strip()
+        if re.match(r'^(借|贷)[:：]', first) and re.match(r'^\d', second):
+            continue
+        if re.match(r'^(例如|如果|然而|此外|同时|因此|但是|需要注意的是|一是|二是|首先|其次|再次|最后)', second):
+            continue
+        if first.endswith(('。', '：', '；', '，', '、', '”')):
+            continue
+        if sep == '的' and not second.startswith(('是', '确', '原', '基', '结', '情')):
+            yield m
+        elif sep in ['可', '以', '除', '或', '项', '形', '如', '资', '产', '工', '具', '纳', '差']:
+            yield m
+```
+
+**修复原则**：LLM阅读原文语义，确认两句实为一句被截断后，方可合并。
+
+### 5.5 批量修复禁区清单
+
+| 禁区 | 原因 | 正确做法 |
+|------|------|---------|
+| 例题编号统一连续 | 可能破坏原文的层级嵌套结构 | 脚本标红 → LLM逐例判断 → 再修复 |
+| h5批量插入/降级 | 容易误伤例题步骤或正文论述 | 脚本列出候选 → LLM逐条判断语义角色 |
+| 断行分裂批量合并 | 正则无法区分真正的分段和断句 | 脚本列出候选 → LLM读原文确认后合并 |
+| MathML批量删除 | 正文公式（非分录）的math可能是正确的 | 仅对会计分录场景做标准化替换 |
+| 语义锚点批量插入 | 已在Phase 2铁律中禁止，此处重申 | 逐节LLM阅读原文后插入 |
+
+### 5.6 反向修复规范（对旧章节升级）
+
+**目标**：将1-18章的结构质量提升到19-22章的当前水准。
+
+**升级顺序**：
+1. **MathML分录清理**（优先级最高，影响阅读）
+2. **例题编号错乱扫描修复**
+3. **断行分裂修复**
+4. **h5/p边界复核**（主要针对例题密集的章节）
+5. **语义锚点质量抽检**（不重新全量生成，只抽验并补修明显不合理的锚点）
+
+**升级最小单元**：按章执行，每章完成后强制检查通过。
+
+---
+
+## 6. 异常处理规则
 
 | 异常 | 处理方式 |
 |------|---------|
