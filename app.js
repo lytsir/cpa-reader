@@ -105,10 +105,12 @@ async function loadSubject(subject) {
   els.originalContent.removeEventListener('scroll', onOriginalScroll);
   els.originalContent.addEventListener('scroll', onOriginalScroll);
 
-  // 默认滚动到第一章
-  setTimeout(() => {
-    scrollToAnchor(`${subject}-第1章`);
-  }, 50);
+  // 默认滚动到第一章（等待大HTML渲染稳定）
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      scrollToAnchor(`${subject}-第1章`);
+    }, 300);
+  });
 }
 
 /* ===== 大白话加载 ===== */
