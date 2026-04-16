@@ -289,6 +289,25 @@ for m in re.finditer(r'<h5[^>]*>（[0-9]+）[）)．.\s]*[^<]{3,40}</h5>', html)
     before = html[max(0, m.start()-200):m.start()]
     assert '[例' not in before and '账务处理如下' not in before and '会计分录' not in before, \
         f"h5误升级: {m.group(0)}"
+
+# 11. 检查 <br /> 在会计分录中的残留（2026-04-16第三次升级）
+for m in re.finditer(r'<p>(.*?)</p>', html, re.DOTALL):
+    content = m.group(1)
+    if '<br />' in content and ('借' in content or '贷' in content):
+        assert False, f"<br />在分录中残留: {content[:80]}"
+
+# 12. 检查混合分录残留（同一<p>内同时有借和贷）（2026-04-16第三次升级）
+for m in re.finditer(r'<p>(.*?)</p>', html, re.DOTALL):
+    content = m.group(1)
+    text = re.sub(r'<[^>]+>', '', content)
+    if '借' in text and '贷' in text and '\n' not in content:
+        if re.search(r'借[:：]', text) and re.search(r'贷[:：]', text):
+            assert False, f"混合分录残留: {text[:80]}"
+
+# 13. 检查表格标题分离（2026-04-16第三次升级）
+title_splits = re.finditer(r'<p>(表\d+-\d+[^<]*)</p>\n<p>([^<]+)</p>\n<table>', html)
+for m in title_splits:
+    assert False, f"表格标题分离: {m.group(1)} + {m.group(2)}"
 ```
 
 **任何一项检查未通过，禁止提交GitHub，禁止请求用户确认。**
@@ -498,6 +517,94 @@ def find_splits(block):
 5. **语义锚点质量抽检**（不重新全量生成，只抽验并补修明显不合理的锚点）
 
 **升级最小单元**：按章执行，每章完成后强制检查通过。
+
+### 5.7 会计分录纯文本格式规范（2026-04-16第三次升级）
+
+> 基于1-22章237个例题全覆盖审计，建立会计分录的HTML表示标准。
+
+**问题定义**：PDF转HTML后，会计分录经常出现以下格式异常：
+1. **`<br />` 连接多行分录**：多个借/贷条目被塞在同一个 `<p>` 标签内，用 `<br />` 换行
+2. **混合分录**：借方和贷方被合并到同一个 `<p>` 标签内（如 `<p>借：合同资产 5351608 贷：财务费用 5351608</p>`）
+3. **Inline Math 跨越贷/借边界**：math 标签的结束标签与"贷"字连在一起，导致格式错乱
+4. **科目与金额分离**：已被 5.2 覆盖的 block math 问题，以及金额被拆到下一 `<p>` 的问题
+
+**格式标准（强制）**：
+```html
+<!-- 正确 -->
+<p>借：银行存款 77 500</p>
+<p>资本公积——其他资本公积 279 000</p>
+<p>贷：股本 15 500</p>
+<p>资本公积——股本溢价 341 000</p>
+
+<!-- 错误：br连接 -->
+<p>借：其他业务成本 160000<br />\n贷：投资性房地产累计折旧 160000</p>
+
+<!-- 错误：混合分录 -->
+<p>借：合同资产 5351608 贷：财务费用、利息收入等 5351608</p>
+```
+
+**判定与修复**：
+1. `<br />` 在分录中：**必须拆分为独立 `<p>`**（每个借/贷/中间科目一行）
+2. 同一 `<p>` 内同时出现 `借[:：]` 和 `贷[:：]`：**必须拆分为独立 `<p>`**
+3. math 标签与"贷"/"借"字粘连：检查并修复 HTML 结构
+4. 分录条目（借/贷/中间科目）与金额被拆到不同 `<p>`：**必须合并到同一 `<p>`**
+
+**检测脚本**：
+```python
+# 检查 br 在分录中的残留
+for m in re.finditer(r'<p>(.*?)</p>', block, re.DOTALL):
+    content = m.group(1)
+    if '<br />' in content and ('借' in content or '贷' in content):
+        flag(f'<br />分录残留: {content[:80]}')
+
+# 检查混合分录
+for m in re.finditer(r'<p>(.*?)</p>', block, re.DOTALL):
+    text = re.sub(r'<[^>]+>', '', m.group(1))
+    if '借' in text and '贷' in text and '\n' not in m.group(1):
+        if re.search(r'借[:：]', text) and re.search(r'贷[:：]', text):
+            flag(f'混合分录残留: {text[:80]}')
+
+# 检查金额单独成行（排除贷方后面跟说明文字的正常情况）
+for m in re.finditer(r'<p>借[:：]([^<]+)</p>\n<p>(\d[^<]*)</p>', block):
+    flag(f'借方金额分行: {m.group(1)} -> {m.group(2)}')
+for m in re.finditer(r'<p>贷[:：]([^<]+)</p>\n<p>(\d[^<]*)</p>', block):
+    # 排除下一段是"2×25年..."等说明文字
+    if re.match(r'^\d', m.group(2)) and not re.search(r'年|月|日|分析|处理', m.group(2)):
+        flag(f'贷方金额分行: {m.group(1)} -> {m.group(2)}')
+```
+
+### 5.8 表格结构修复规范（2026-04-16新增）
+
+**问题定义**：PDF转HTML时，跨页表格常被拆分为多个 `<table>`，且后续 table 中重复插入表头行。同时表格标题和单位说明常被拆分为多个 `<p>` 标签。
+
+**判定标准**（满足以下全部条件时，必须合并）：
+1. 同一例题/段落内，出现 2 个及以上连续 `<table>`
+2. table 之间仅有短分组标签（如 `<p>第一组</p>`、`<p>第X年</p>`）
+3. 非首 table 中包含与首 table 相同的表头结构（`rowspan`/`colspan` 特征一致）
+
+**修复标准**：
+1. 将多个 `<table>` 合并为 1 个
+2. 删除重复的表头 `<tr>` 行
+3. 将分组标签移入 table 内，作为普通数据行（如 `<tr><td colspan="N">第一组</td></tr>`）
+4. 表格标题和单位说明必须合并为一个 `<p>`（如 `<p>表7-1 单位：万元</p>`）
+
+**检测脚本**：
+```python
+# 检查表格标题分离
+title_splits = re.finditer(r'<p>(表\d+-\d+[^<]*)</p>\n<p>([^<]+)</p>\n<table>', block)
+for m in title_splits:
+    flag(f'表格标题分离: {m.group(1)} + {m.group(2)}')
+
+# 检查表格拆分
+tables = list(re.finditer(r'<table>.*?</table>', block, re.DOTALL))
+for i in range(len(tables)-1):
+    between = block[tables[i].end():tables[i+1].start()]
+    between_text = re.sub(r'<[^>]+>', '', between).strip()
+    if len(between_text) < 50 and between.count('<p>') <= 2:
+        table2 = tables[i+1].group(0)
+        if 'rowspan' in table2 or 'colspan' in table2 or '<th>' in table2:
+            flag(f'表格可能拆分: 第{i+1}与{i+2}个table之间="{between_text}"')
+```
 
 ---
 
