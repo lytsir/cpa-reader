@@ -151,6 +151,15 @@ html, body {
   color: #444;
   font-size: 14px;
 }
+.toc-item.journal-link {
+  padding-left: 26px;
+  color: #2b5bd4;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.toc-item.journal-link:hover {
+  background: #eef3ff;
+}
 
 /* 遮罩 */
 .sidebar-overlay {
@@ -220,6 +229,98 @@ html, body {
   background: linear-gradient(to right, #4a7dff, #d0d7de, transparent);
   height: 3px;
   opacity: 1;
+}
+
+/* ===== 分录视图样式 ===== */
+.journal-view {
+  padding: 16px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.journal-view h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+.journal-category {
+  margin-bottom: 24px;
+}
+.journal-category h3 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #4a7dff;
+}
+
+.journal-entry {
+  margin-bottom: 16px;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  background: #fff;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, box-shadow .15s;
+}
+.journal-entry:hover {
+  background: #f8faff;
+  border-color: #b8d0ff;
+  box-shadow: 0 2px 8px rgba(74,125,255,.08);
+}
+.journal-entry.active {
+  background: #eef3ff;
+  border-color: #4a7dff;
+  box-shadow: 0 2px 8px rgba(74,125,255,.12);
+}
+
+.journal-entry-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.journal-entry-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.journal-entry-table td {
+  padding: 6px 10px;
+  border: none;
+  vertical-align: top;
+  line-height: 1.6;
+}
+.journal-entry-table tr.debit td {
+  color: #1a1a1a;
+}
+.journal-entry-table tr.credit td {
+  color: #444;
+}
+.journal-entry-table .jr-dir {
+  width: 36px;
+  text-align: center;
+  font-weight: 600;
+  white-space: pre;
+}
+.journal-entry-table .jr-account {
+  padding-left: 8px;
+}
+.journal-entry-table .jr-amount {
+  text-align: right;
+  white-space: nowrap;
+  padding-right: 8px;
+  font-family: "SF Mono", "Menlo", "Consolas", monospace;
+}
+
+.journal-translate h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #222;
+}
+.journal-translate p {
+  line-height: 1.75;
+  color: #333;
 }
 
 /* ===== 分隔线 ===== */

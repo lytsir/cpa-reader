@@ -8,8 +8,10 @@ const state = {
   resizerDragging: false,
   translatePanelWidth: 0.38,
   translateData: {},
+  journalData: {},
   currentAnchor: null,
   anchorElements: [],
+  inJournalView: false,
 };
 
 const els = {
@@ -25,6 +27,7 @@ const els = {
   translateContent: document.getElementById('translate-content'),
   translateToggle: document.getElementById('translate-toggle'),
   translateClose: document.getElementById('translate-close'),
+  journalBack: document.getElementById('journal-back'),
 };
 
 /* ===== 初始化 ===== */
@@ -42,6 +45,10 @@ async function init() {
   els.pinToggle.addEventListener('click', togglePin);
   if (els.translateToggle) els.translateToggle.addEventListener('click', openTranslatePanel);
   if (els.translateClose) els.translateClose.addEventListener('click', closeTranslatePanel);
+  if (els.journalBack) els.journalBack.addEventListener('click', () => {
+    state.inJournalView = false;
+    loadSubject(state.subject);
+  });
   setupResizer();
   updateSidebarUI();
 
@@ -74,6 +81,8 @@ function onSubjectChange() {
 async function loadSubject(subject) {
   els.originalContent.innerHTML = '<div class="placeholder">正在加载教材...</div>';
   els.translateContent.innerHTML = '<div class="placeholder">请先选择目录开始学习</div>';
+  if (els.journalBack) els.journalBack.style.display = 'none';
+  state.inJournalView = false;
 
   renderTOC(subject);
 
@@ -96,6 +105,14 @@ async function loadSubject(subject) {
     state.translateData[subject] = await transRes.json();
   } catch (e) {
     state.translateData[subject] = {};
+  }
+
+  // 加载分录索引
+  try {
+    const jrRes = await fetch(`metadata/${subject}_分录索引.json?v=${Date.now()}`);
+    state.journalData[subject] = await jrRes.json();
+  } catch (e) {
+    state.journalData[subject] = {};
   }
 
   // 获取锚点并绑定滚动监听和点击跳转
@@ -233,7 +250,7 @@ function syncTOCHighlight(anchorId) {
   if (bestItem) bestItem.classList.add('active');
 }
 
-/* ===== 渲染目录（章→节两级） ===== */
+/* ===== 渲染目录（章→节两级 + 分录链接） ===== */
 function renderTOC(subject) {
   els.tocTree.innerHTML = '';
   const data = state.tocData && state.tocData[subject];
@@ -241,6 +258,8 @@ function renderTOC(subject) {
     els.tocTree.innerHTML = '<div class="toc-item">暂无目录</div>';
     return;
   }
+
+  const journalMap = state.journalData[subject] || {};
 
   data.chapters.forEach((ch) => {
     const chItem = document.createElement('div');
@@ -266,11 +285,31 @@ function renderTOC(subject) {
       });
       els.tocTree.appendChild(secItem);
     });
+
+    // 如果本章有分录，添加分录链接
+    if (journalMap[ch.anchor]) {
+      const jrItem = document.createElement('div');
+      jrItem.className = 'toc-item journal-link';
+      jrItem.textContent = '📋 本章会计分录';
+      jrItem.dataset.journal = ch.anchor;
+      jrItem.addEventListener('click', () => {
+        showJournalEntries(ch.anchor);
+        highlightTOC(jrItem);
+        if (isMobile()) closeSidebar();
+      });
+      els.tocTree.appendChild(jrItem);
+    }
   });
 }
 
 /* ===== 跳转到锚点 ===== */
 function scrollToAnchor(anchor) {
+  // 如果当前在分录视图，先切回原文视图
+  if (state.inJournalView) {
+    state.inJournalView = false;
+    loadSubject(state.subject);
+    return;
+  }
   const el = document.getElementById(anchor);
   if (!el) return;
   const container = els.originalContent;
@@ -278,6 +317,86 @@ function scrollToAnchor(anchor) {
   container.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
   loadTranslate(anchor);
   syncTOCHighlight(anchor);
+}
+
+/* ===== 显示分录表格 ===== */
+function showJournalEntries(chapterAnchor) {
+  state.inJournalView = true;
+  if (els.journalBack) els.journalBack.style.display = 'flex';
+  const data = state.journalData[state.subject] || {};
+  const chapter = data[chapterAnchor];
+  if (!chapter) return;
+
+  let html = `<div class="journal-view"><h2>${escapeHtml(chapter.title)}</h2>`;
+
+  chapter.entries.forEach((cat) => {
+    html += `<div class="journal-category"><h3>${escapeHtml(cat.category)}</h3>`;
+    cat.items.forEach((item, idx) => {
+      const entryId = `${chapterAnchor}-jr-${idx}`;
+      html += renderJournalEntry(item, entryId);
+    });
+    html += `</div>`;
+  });
+
+  html += `</div>`;
+  els.originalContent.innerHTML = html;
+
+  // 绑定点击事件
+  els.originalContent.querySelectorAll('.journal-entry').forEach((el) => {
+    el.addEventListener('click', () => {
+      const entryId = el.dataset.entryId;
+      showJournalTranslate(entryId);
+      els.originalContent.querySelectorAll('.journal-entry.active').forEach((a) => a.classList.remove('active'));
+      el.classList.add('active');
+    });
+  });
+
+  // 右栏显示提示
+  els.translateContent.innerHTML = '<div class="placeholder">👆 点击左侧分录查看大白话解释</div>';
+}
+
+/* ===== 渲染单个分录条目 ===== */
+function renderJournalEntry(item, entryId) {
+  let debitRows = item.debit.map((d) =>
+    `<tr class="debit"><td class="jr-dir">借</td><td class="jr-account">${escapeHtml(d.科目)}</td><td class="jr-amount">${escapeHtml(d.金额)}</td></tr>`
+  ).join('');
+  let creditRows = item.credit.map((c) =>
+    `<tr class="credit"><td class="jr-dir">　贷</td><td class="jr-account">${escapeHtml(c.科目)}</td><td class="jr-amount">${escapeHtml(c.金额)}</td></tr>`
+  ).join('');
+
+  return `
+    <div class="journal-entry" data-entry-id="${entryId}">
+      <div class="journal-entry-title">${escapeHtml(item.title)}</div>
+      <table class="journal-entry-table">
+        <tbody>${debitRows}${creditRows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* ===== 显示分录大白话 ===== */
+function showJournalTranslate(entryId) {
+  const [chapterAnchor, , idxStr] = entryId.split('-');
+  const data = state.journalData[state.subject] || {};
+  const chapter = data[chapterAnchor];
+  if (!chapter) return;
+
+  // 找到对应的分录条目
+  let flatIdx = 0;
+  for (const cat of chapter.entries) {
+    for (const item of cat.items) {
+      if (flatIdx == idxStr) {
+        els.translateContent.innerHTML = `
+          <div class="journal-translate">
+            <h4>${escapeHtml(item.title)}</h4>
+            <p>${escapeHtml(item.大白话).replace(/\n/g, '<br>')}</p>
+          </div>
+        `;
+        return;
+      }
+      flatIdx++;
+    }
+  }
 }
 
 /* ===== 高亮目录项 ===== */
