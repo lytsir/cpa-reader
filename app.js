@@ -98,11 +98,13 @@ async function loadSubject(subject) {
     state.translateData[subject] = {};
   }
 
-  // 获取锚点并绑定滚动监听
+  // 获取锚点并绑定滚动监听和点击跳转
   state.anchorElements = Array.from(els.originalContent.querySelectorAll('.section-anchor'));
   state.currentAnchor = null;
   els.originalContent.removeEventListener('scroll', onOriginalScroll);
   els.originalContent.addEventListener('scroll', onOriginalScroll);
+  els.originalContent.removeEventListener('click', onOriginalClick);
+  els.originalContent.addEventListener('click', onOriginalClick);
 
   // 默认滚动到第一章（等待大HTML渲染稳定）
   requestAnimationFrame(() => {
@@ -113,13 +115,16 @@ async function loadSubject(subject) {
 }
 
 /* ===== 大白话加载 ===== */
-function loadTranslate(anchorId) {
+function loadTranslate(anchorId, scrollTop) {
   const data = state.translateData[state.subject] || {};
   const content = data[anchorId];
   if (content) {
     els.translateContent.innerHTML = `<div class="translate-section">${escapeHtml(content).replace(/\n/g, '<br>')}</div>`;
   } else {
     els.translateContent.innerHTML = `<div class="placeholder">暂无大白话解读，敬请期待</div>`;
+  }
+  if (scrollTop) {
+    els.translateContent.scrollTop = 0;
   }
 }
 
@@ -131,6 +136,17 @@ function escapeHtml(text) {
 
 /* ===== 滚动监听 ===== */
 const onOriginalScroll = throttle(updateActiveAnchor, 120);
+
+/* ===== 点击跳转 ===== */
+function onOriginalClick(e) {
+  const anchor = e.target.closest('.section-anchor');
+  if (!anchor || !anchor.id) return;
+  if (anchor.id !== state.currentAnchor) {
+    state.currentAnchor = anchor.id;
+    loadTranslate(anchor.id, true);
+    syncTOCHighlight(anchor.id);
+  }
+}
 
 function updateActiveAnchor() {
   if (!state.anchorElements.length) return;
