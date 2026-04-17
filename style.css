@@ -224,7 +224,7 @@ html, body {
 
 /* ===== 分隔线 ===== */
 .resizer {
-  width: 10px;
+  width: 12px;
   background: #e8e8e8;
   cursor: col-resize;
   flex-shrink: 0;
@@ -235,15 +235,16 @@ html, body {
   position: relative;
   z-index: 100;
   transition: background .15s;
+  pointer-events: auto;
 }
 .resizer:hover {
   background: #d0d7de;
 }
 .resizer::after {
   content: "";
-  width: 3px;
-  height: 28px;
-  background: #c8c8c8;
+  width: 4px;
+  height: 36px;
+  background: #c0c0c0;
   border-radius: 2px;
 }
 body.resizer-dragging,

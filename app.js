@@ -327,6 +327,7 @@ function setupResizer() {
   function startDrag(e) {
     if (isMobile()) return;
     e.preventDefault();
+    e.stopPropagation();
     state.resizerDragging = true;
     document.body.classList.add('resizer-dragging');
 
