@@ -139,12 +139,40 @@ const onOriginalScroll = throttle(updateActiveAnchor, 120);
 
 /* ===== 点击跳转 ===== */
 function onOriginalClick(e) {
-  const anchor = e.target.closest('.section-anchor');
-  if (!anchor || !anchor.id) return;
-  if (anchor.id !== state.currentAnchor) {
-    state.currentAnchor = anchor.id;
-    loadTranslate(anchor.id, true);
-    syncTOCHighlight(anchor.id);
+  const container = els.originalContent;
+  const rect = container.getBoundingClientRect();
+  const clickY = e.clientY - rect.top + container.scrollTop;
+
+  let bestAnchor = state.anchorElements[0];
+  for (let i = 0; i < state.anchorElements.length; i++) {
+    const el = state.anchorElements[i];
+    const nextEl = state.anchorElements[i + 1];
+    const top = el.offsetTop - container.offsetTop;
+    const nextTop = nextEl ? nextEl.offsetTop - container.offsetTop : Infinity;
+    if (clickY >= top && clickY < nextTop) {
+      bestAnchor = el;
+      break;
+    }
+  }
+
+  if (bestAnchor.id !== state.currentAnchor) {
+    state.currentAnchor = bestAnchor.id;
+    loadTranslate(bestAnchor.id, true);
+    syncTOCHighlight(bestAnchor.id);
+    highlightAnchorBlock(bestAnchor.id);
+  }
+}
+
+/* ===== 高亮当前锚点区块 ===== */
+function highlightAnchorBlock(anchorId) {
+  els.originalContent.querySelectorAll('.active-anchor').forEach(el => el.classList.remove('active-anchor'));
+  const anchor = document.getElementById(anchorId);
+  if (!anchor) return;
+  anchor.classList.add('active-anchor');
+  let sibling = anchor.nextElementSibling;
+  while (sibling && !sibling.classList.contains('section-anchor')) {
+    sibling.classList.add('active-anchor');
+    sibling = sibling.nextElementSibling;
   }
 }
 
@@ -167,6 +195,7 @@ function updateActiveAnchor() {
     state.currentAnchor = bestAnchor.id;
     loadTranslate(bestAnchor.id);
     syncTOCHighlight(bestAnchor.id);
+    highlightAnchorBlock(bestAnchor.id);
   }
 }
 

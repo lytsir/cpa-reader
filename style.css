@@ -210,7 +210,16 @@ html, body {
   background: linear-gradient(to right, transparent, #d0d7de, transparent);
   margin: 20px 0 12px 0;
   padding: 0;
-  pointer-events: none;
+}
+
+/* 当前激活的锚点区块高亮 */
+.original-content .active-anchor {
+  background: rgba(238, 243, 255, 0.55);
+}
+.original-content .section-anchor.active-anchor {
+  background: linear-gradient(to right, #4a7dff, #d0d7de, transparent);
+  height: 3px;
+  opacity: 1;
 }
 
 /* ===== 分隔线 ===== */
