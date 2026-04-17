@@ -37,6 +37,23 @@ async function init() {
 
   els.subjectSelect.value = state.subject;
 
+  // 更新 humanizer 切换按钮
+  const isHumanizer = urlParams.get('humanizer') === '1';
+  const toggleLink = document.getElementById('toggle-humanizer');
+  if (toggleLink) {
+    if (isHumanizer) {
+      toggleLink.textContent = '原版';
+      const url = new URL(window.location);
+      url.searchParams.delete('humanizer');
+      toggleLink.href = url.toString();
+    } else {
+      toggleLink.textContent = 'Humanizer版';
+      const url = new URL(window.location);
+      url.searchParams.set('humanizer', '1');
+      toggleLink.href = url.toString();
+    }
+  }
+
   els.subjectSelect.addEventListener('change', onSubjectChange);
   els.menuToggle.addEventListener('click', toggleSidebar);
   els.sidebarOverlay.addEventListener('click', closeSidebar);
@@ -92,8 +109,11 @@ async function loadSubject(subject) {
   }
 
   // 加载大白话索引
+  const urlParams = new URLSearchParams(window.location.search);
+  const useHumanizer = urlParams.get('humanizer') === '1';
+  const indexSuffix = useHumanizer ? '_大白话索引_humanizer' : '_大白话索引';
   try {
-    const transRes = await fetch(`metadata/${subject}_大白话索引.json?v=${Date.now()}`);
+    const transRes = await fetch(`metadata/${subject}${indexSuffix}.json?v=${Date.now()}`);
     state.translateData[subject] = await transRes.json();
   } catch (e) {
     state.translateData[subject] = {};
