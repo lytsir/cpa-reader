@@ -34,25 +34,7 @@ async function init() {
   const savedSubject = localStorage.getItem('cpa-subject');
   if (urlSubject) state.subject = urlSubject;
   else if (savedSubject) state.subject = savedSubject;
-
   els.subjectSelect.value = state.subject;
-
-  // 更新 humanizer 切换按钮
-  const isHumanizer = urlParams.get('humanizer') === '1';
-  const toggleLink = document.getElementById('toggle-humanizer');
-  if (toggleLink) {
-    if (isHumanizer) {
-      toggleLink.textContent = '原版';
-      const url = new URL(window.location);
-      url.searchParams.delete('humanizer');
-      toggleLink.href = url.toString();
-    } else {
-      toggleLink.textContent = 'Humanizer版';
-      const url = new URL(window.location);
-      url.searchParams.set('humanizer', '1');
-      toggleLink.href = url.toString();
-    }
-  }
 
   els.subjectSelect.addEventListener('change', onSubjectChange);
   els.menuToggle.addEventListener('click', toggleSidebar);
@@ -109,11 +91,8 @@ async function loadSubject(subject) {
   }
 
   // 加载大白话索引
-  const urlParams = new URLSearchParams(window.location.search);
-  const useHumanizer = urlParams.get('humanizer') === '1';
-  const indexSuffix = useHumanizer ? '_大白话索引_humanizer' : '_大白话索引';
   try {
-    const transRes = await fetch(`metadata/${subject}${indexSuffix}.json?v=${Date.now()}`);
+    const transRes = await fetch(`metadata/${subject}_大白话索引.json?v=${Date.now()}`);
     state.translateData[subject] = await transRes.json();
   } catch (e) {
     state.translateData[subject] = {};
@@ -302,9 +281,9 @@ function setupResizer() {
 
   function startDrag(e) {
     if (isMobile()) return;
+    e.preventDefault();
     state.resizerDragging = true;
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
+    document.body.classList.add('resizer-dragging');
 
     document.addEventListener('mousemove', onDrag);
     document.addEventListener('mouseup', stopDrag);
@@ -314,20 +293,21 @@ function setupResizer() {
 
   function onDrag(e) {
     if (!state.resizerDragging) return;
+    e.preventDefault();
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const containerWidth = document.querySelector('.main-container').clientWidth;
+    const containerRect = document.querySelector('.main-container').getBoundingClientRect();
     const sidebarWidth = els.sidebar.clientWidth;
-    const availableWidth = containerWidth - sidebarWidth - 8;
-    let newWidth = containerWidth - clientX;
-    newWidth = Math.max(200, Math.min(newWidth, availableWidth * 0.65));
-    els.translatePanel.style.width = newWidth + 'px';
+    const newWidth = containerRect.right - clientX;
+    const minWidth = 200;
+    const maxWidth = containerRect.width - sidebarWidth - 120;
+    const clampedWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
+    els.translatePanel.style.width = clampedWidth + 'px';
     els.translatePanel.style.flex = 'none';
   }
 
   function stopDrag() {
     state.resizerDragging = false;
-    document.body.style.cursor = '';
-    document.body.style.userSelect = '';
+    document.body.classList.remove('resizer-dragging');
     document.removeEventListener('mousemove', onDrag);
     document.removeEventListener('mouseup', stopDrag);
     document.removeEventListener('touchmove', onDrag);

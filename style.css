@@ -215,7 +215,7 @@ html, body {
 
 /* ===== 分隔线 ===== */
 .resizer {
-  width: 8px;
+  width: 10px;
   background: #e8e8e8;
   cursor: col-resize;
   flex-shrink: 0;
@@ -223,6 +223,12 @@ html, body {
   align-items: center;
   justify-content: center;
   touch-action: none;
+  position: relative;
+  z-index: 100;
+  transition: background .15s;
+}
+.resizer:hover {
+  background: #d0d7de;
 }
 .resizer::after {
   content: "";
@@ -230,6 +236,11 @@ html, body {
   height: 28px;
   background: #c8c8c8;
   border-radius: 2px;
+}
+body.resizer-dragging,
+body.resizer-dragging * {
+  cursor: col-resize !important;
+  user-select: none !important;
 }
 
 /* ===== 右栏：大白话 ===== */
