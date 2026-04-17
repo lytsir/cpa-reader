@@ -84,6 +84,16 @@ async function loadSubject(subject) {
   if (els.journalBack) els.journalBack.style.display = 'none';
   state.inJournalView = false;
 
+  // 预加载分录索引（renderTOC需要）
+  if (!state.journalData[subject]) {
+    try {
+      const jrRes = await fetch(`metadata/${encodeURIComponent(subject + '_分录索引.json')}?v=${Date.now()}`);
+      state.journalData[subject] = await jrRes.json();
+    } catch (e) {
+      state.journalData[subject] = {};
+    }
+  }
+
   renderTOC(subject);
 
   // 加载原文
@@ -105,14 +115,6 @@ async function loadSubject(subject) {
     state.translateData[subject] = await transRes.json();
   } catch (e) {
     state.translateData[subject] = {};
-  }
-
-  // 加载分录索引
-  try {
-    const jrRes = await fetch(`metadata/${subject}_分录索引.json?v=${Date.now()}`);
-    state.journalData[subject] = await jrRes.json();
-  } catch (e) {
-    state.journalData[subject] = {};
   }
 
   // 获取锚点并绑定滚动监听和点击跳转
