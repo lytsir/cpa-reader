@@ -125,11 +125,90 @@ async function loadSubject(subject) {
   els.originalContent.removeEventListener('click', onOriginalClick);
   els.originalContent.addEventListener('click', onOriginalClick);
 
+  // 修复原文中的分录表格
+  fixJournalTablesInOriginal();
+
   // 默认滚动到第一章（等待大HTML渲染稳定）
   requestAnimationFrame(() => {
     setTimeout(() => {
       scrollToAnchor(`${subject}-第1章`);
     }, 300);
+  });
+}
+
+/* ===== 修复原文中的分录表格 ===== */
+function fixJournalTablesInOriginal() {
+  const tables = els.originalContent.querySelectorAll('table');
+  tables.forEach((table) => {
+    const text = table.textContent || '';
+    // 只处理包含分录的table（有借或贷），排除数据表格
+    if (!text.includes('借') && !text.includes('贷')) return;
+    if (/日期|总计|单位|项目|计算过程|月度/.test(text)) return;
+
+    const rows = table.querySelectorAll('tr');
+    const lines = [];
+    let currentSide = null; // 'debit' or 'credit'
+
+    rows.forEach((row) => {
+      const cells = row.querySelectorAll('td');
+      if (cells.length < 2) return;
+
+      let account = (cells[0].textContent || '').trim();
+      const amount = (cells[1].textContent || '').trim();
+
+      // 跳过非分录行（如"实际支付利息时："）
+      if (/^[\u4e00-\u9fa5]{2,6}：?$/.test(account) && !amount) {
+        lines.push(account);
+        return;
+      }
+
+      // 处理借贷标记
+      if (account.startsWith('借:') || account.startsWith('借：')) {
+        currentSide = 'debit';
+        account = account.replace('借:', '借：');
+        let line = account;
+        if (amount) line += '　' + amount;
+        lines.push(line);
+      } else if (account.startsWith('贷:') || account.startsWith('贷：')) {
+        currentSide = 'credit';
+        account = account.replace('贷:', '贷：');
+        let line = '　' + account;
+        if (amount) line += '　' + amount;
+        lines.push(line);
+      } else {
+        // 继续行（明细科目），根据上一行缩进
+        if (currentSide === 'debit') {
+          let line = '　　' + account;
+          if (amount) line += '　' + amount;
+          lines.push(line);
+        } else if (currentSide === 'credit') {
+          let line = '　　　' + account;
+          if (amount) line += '　' + amount;
+          lines.push(line);
+        } else {
+          // 无法判断，当作借方处理
+          let line = account;
+          if (amount) line += '　' + amount;
+          lines.push(line);
+        }
+      }
+    });
+
+    if (lines.length > 0) {
+      const pre = document.createElement('pre');
+      pre.className = 'journal-entry-fixed';
+      pre.style.fontFamily = '"SF Mono", "PingFang SC", "Microsoft YaHei", monospace';
+      pre.style.fontSize = '14px';
+      pre.style.lineHeight = '1.8';
+      pre.style.background = '#f8f9fa';
+      pre.style.padding = '12px 16px';
+      pre.style.borderRadius = '6px';
+      pre.style.margin = '12px 0';
+      pre.style.overflowX = 'auto';
+      pre.style.whiteSpace = 'pre';
+      pre.textContent = lines.join('\n');
+      table.parentNode.replaceChild(pre, table);
+    }
   });
 }
 
