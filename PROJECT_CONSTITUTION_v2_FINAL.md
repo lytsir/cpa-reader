@@ -757,6 +757,7 @@ for m in re.finditer(r'<table>.*?</table>', block, re.DOTALL):
 | 原文HTML有损坏/缺失 | 立即停止，汇报问题，等待用户修复原文 |
 | 用户说"网站上没看到" | 第一条排查：`git status` 检查本地是否 ahead of origin |
 | 用户指令与当前上下文不一致 | 立即确认，禁止假设执行 |
+| 通信平台断连（Telegram/Discord等） | 立即检查代理配置（Clash端口7897）和网络状态，恢复后汇报中断期间的工作状态 |
 
 ---
 
