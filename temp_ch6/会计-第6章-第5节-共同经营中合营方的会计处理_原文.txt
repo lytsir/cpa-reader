@@ -1,0 +1,34 @@
+<div id="会计-第6章-第5节-共同经营中合营方的会计处理" class="section-anchor"></div><h3 id="二共同经营中合营方的会计处理">二、共同经营中合营方的会计处理</h3>
+<h4 id="一一般会计处理原则">（一）一般会计处理原则</h4>
+<p>除合营方对持有合营企业投资应当采用权益法核算以外，其他合营安排中的合营方应当确认自身所承担的以及按比例享有或承担的合营安排中按照合同、协议等的规定归属于本企业的资产、负债、收入及费用。该处理方法一定程度上类似于比例合并，但与比例合并又存在差异。具体如下：</p>
+<p>合营方应当确认其与共同经营中利益份额相关的下列项目，并按照相关企业会计准则的规定进行会计处理：一是确认单独所持有的资产，以及按其份额确认共同持有的资产；二是确认单独所承担的负债，以及按其份额确认共同承担的负债；三是确认出售其享有的共同经营产出份额所产生的收入；四是按其份额确认共同经营因出售产出所产生的收入；五是确认单独所发生的费用，以及按其份额确认共同经营发生的费用。</p>
+<p>合营方可能将其自有资产用于共同经营，如果合营方保留了对这些资产的全部所有权或控制权，则这些资产的会计处理与合营方自有资产的会计处理并无差别。</p>
+<p>合营方也可能与其他合营方共同购买资产来投入共同经营，并共同承担共同经营的负债，此时，合营方应当按照企业会计准则相关规定确认在这些资产和负债中的利益份额。如按照《企业会计准则第4号——固定资产》来确认在相关固定资产中的利益份额，按照《企业会计准则第22号——金融工具确认和计量》来确认在相关金融资产和金融负债中的份额。共同经营通过单独主体达成时，合营方应确认按照上述原则单独所承担的负债，以及按本企业的份额确认共同承担的负债。但合营方对于因其他股东未按约定向合营安排提供资金，按照我国相关法律或相关合同约定等规定而承担连带责任的，从其规定，在会计处理上应遵循《企业会计准则第13号——或有事项》的要求。</p>
+<p>有关合营合同的安排通常描述了该安排所从事活动的性质，以及各参与方打算共同开展这些活动的方式。例如，合营安排各参与方可能同意共同生产产品，每一参与方负责特定的任务，使用各自的资产，承担各自的负债。合同安排也可能规定了各参与方分享共同收入和分担共同费用的方式。在这种情况下，每一个合营方在其资产负债表上确认其用于完成特定任务的资产和负债，并根据相关约定确认相关的收入和费用份额。当合营安排各参与方可能同意共同拥有和经营一项资产时，相关约定规定了各参与方对共同经营资产的权利，以及来自该项资产的收入或产出和相应的经营成本在各参与方之间分配的方式。每一个合营方对其在共同资产中的份额、同意承担的负债份额进行会计处理，并按照相关约定确认其在产出、收入和费用中的份额。</p>
+<p>[例6-27]
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>24</mn></mrow><annotation encoding="application/x-tex">2 \times 24</annotation></semantics></math>
+年1月1日，A公司和B公司共同出资购买一栋写字楼，各自拥有该写字楼
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>50</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">50\%</annotation></semantics></math>
+的产权，用于出租收取租金。合同约定，该写字楼相关活动的决策需要A公司和B公司一致同意方可作出；A公司和B公司的出资比例、收入分享比例和费用分担比例均为各自
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>50</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">50\%</annotation></semantics></math>
+。该写字楼购买价款为8000万元，由A公司和B公司以银行存款支付，预计使用寿命20年，预计净残值为320万元，采用年限平均法按月计提折旧。该写字楼的租赁合同约定，租赁期限为10年，每年租金为480万元，按月支付。该写字楼每月支付维修费2万元。另外，A公司和B公司约定，该写字楼的后续维护和维修支出（包括再装修支出和任何其他的大修支出）以及与该写字楼相关的任何资金需求，均由A公司和B公司按比例承担。假设A公司和B公司均采用成本法对投资性房地产进行后续计量，不考虑税费等其他因素影响。</p>
+<p>本例中，由于关于该写字楼相关活动的决策需要A公司和B公司一致同意方可作出，所以A公司和B公司共同控制该写字楼，购买并出租该写字楼为一项合营安排。由于该合营安排并未通过一个单独主体来架构，并明确约定了A公司和B公司享有该安排中资产的权利、获得该安排相应收入的权利、承担相应费用的责任等，因此该合营安排是共</p>
+<p>同经营。A公司的相关账务处理如下：</p>
+<p>（1）出资购买写字楼时：</p>
+<p>借：投资性房地产
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>80000000</mn><mo>×</mo><mn>50</mn><mi>%</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(80000000\times 50\%)</annotation></semantics></math>
+40000000贷：银行存款 40000000</p>
+<p>（2）每月确认租金收入时：</p>
+<p>借：银行存款
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>4800000</mn><mo>×</mo><mn>50</mn><mi>%</mi><mo>÷</mo><mn>12</mn><mo stretchy="false" form="postfix">)</mo><mn>200000</mn></mrow><annotation encoding="application/x-tex">(4800000\times 50\% \div 12)200000</annotation></semantics></math>
+贷：其他业务收入 200000</p>
+<p>（3）每月计提写字楼折旧时：</p>
+<p>每月计提折旧额
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>8000</mn><mo>−</mo><mn>320</mn><mo stretchy="false" form="postfix">)</mo><mo>÷</mo><mn>20</mn><mo>÷</mo><mn>12</mn><mo>×</mo><mn>50</mn><mi>%</mi><mo>=</mo><mn>16</mn></mrow><annotation encoding="application/x-tex">= (8000 - 320) \div 20 \div 12 \times 50\% = 16</annotation></semantics></math>
+（万元）</p>
+<p>借：其他业务成本 160000<br />
+贷：投资性房地产累计折旧 160000</p>
+<p>（4）每月支付维修费时：</p>
+<p>借：其他业务成本
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>20000</mn><mo>×</mo><mn>50</mn><mi>%</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(20000\times 50\%)</annotation></semantics></math>
+10000贷：银行存款 10000</p>

@@ -1,0 +1,13 @@
+<div id="会计-第6章-第5节-合营方自共同经营购买不构成业务的资产的会计处理" class="section-anchor"></div><h4 id="三合营方自共同经营购买不构成业务的资产的会计处理">（三）合营方自共同经营购买不构成业务的资产的会计处理</h4>
+<p>合营方自共同经营购买资产等（该资产构成业务的除外），在将该资产等出售给第三方之前（即，未实现内部利润仍包括在合营方持有的资产账面价值中时），不应当确认因该交易产生的损益中该合营方应享有的部分。</p>
+<p>[例6-28]A公司和B公司共同设立一项安排C，假定该安排为共同经营，A公司和B公司对于安排C的资产、负债及损益分别享有
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>50</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">50\%</annotation></semantics></math>
+的份额。
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">2 \times 25</annotation></semantics></math>
+年12月31日，A公司支付采购价款（不含增值税）100万元，购入安排C的一批产品，A公司将该批产品作为存货入账，尚未对外出售。该项产品在安排C中的账面价值为60万元。</p>
+<p>本例中，安排C因上述交易确认了收益40万元。A公司对该收益按份额应享有20万元
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>40</mn><mo>×</mo><mn>50</mn><mi>%</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(40\times 50\%)</annotation></semantics></math>
+。但由于在资产负债表日该项存货仍未出售给第三方，因此该未实现内部损益20万元应当被抵销，相应减少存货的账面价值。但B公司对该收益应享有20万元
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>40</mn><mo>×</mo><mn>50</mn><mi>%</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(40\times 50\%)</annotation></semantics></math>
+应当予以确认，B公司享有的20万元收益反映在A公司存货的期末账面价值中。</p>
+<p>当这类交易提供证据表明购入的资产发生符合《企业会计准则第8号——资产减值》等规定的资产减值损失的，合营方应当按其承担的份额确认该部分损失。</p>
