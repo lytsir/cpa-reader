@@ -131,11 +131,41 @@ async function loadSubject(subject) {
   // 修复原文中的LaTeX公式
   fixLatexFormulasInOriginal();
 
+  // 修复原文中的半角括号
+  fixHalfWidthBracketsInOriginal();
+
   // 默认滚动到第一章（等待大HTML渲染稳定）
   requestAnimationFrame(() => {
     setTimeout(() => {
       scrollToAnchor(`${subject}-第1章`);
     }, 300);
+  });
+}
+
+/* ===== 修复原文中的半角括号 ===== */
+function fixHalfWidthBracketsInOriginal() {
+  // 将中文后的半角括号替换为全角括号
+  const walker = document.createTreeWalker(
+    els.originalContent,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+  const nodesToReplace = [];
+  let node;
+  while ((node = walker.nextNode())) {
+    if (/[\u4e00-\u9fa5][()][\u4e00-\u9fa5\w]/.test(node.textContent)) {
+      nodesToReplace.push(node);
+    }
+  }
+
+  nodesToReplace.forEach((textNode) => {
+    let text = textNode.textContent;
+    // 中文后接半角左括号 → 全角左括号
+    text = text.replace(/([\u4e00-\u9fa5])\(/g, '$1（');
+    // 中文后接半角右括号 → 全角右括号
+    text = text.replace(/([\u4e00-\u9fa5\w])\)/g, '$1）');
+    textNode.textContent = text;
   });
 }
 
