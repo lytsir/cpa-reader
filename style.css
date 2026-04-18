@@ -468,6 +468,50 @@ body.resizer-dragging * {
   }
 }
 
+/* ===== 原文中的数据表格样式 ===== */
+.original-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.original-content table thead {
+  background: #f0f2f5;
+}
+.original-content table th,
+.original-content table td {
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+  vertical-align: top;
+}
+.original-content table th {
+  font-weight: 600;
+  color: #333;
+  background: #f5f6f7;
+}
+.original-content table tr:nth-child(even) {
+  background: #fafbfc;
+}
+.original-content table tr:hover {
+  background: #f0f7ff;
+}
+
+/* ===== LaTeX公式样式 ===== */
+.original-content .latex-formula {
+  display: inline-block;
+  padding: 2px 6px;
+  background: #f5f6f7;
+  border-radius: 4px;
+  font-family: "SF Mono", "Courier New", monospace;
+  font-size: 14px;
+  color: #333;
+}
+
 /* ===== 响应式：小屏手机 ===== */
 @media (max-width: 380px) {
   .original-content { padding: 12px; font-size: 15px; }

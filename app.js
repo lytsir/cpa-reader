@@ -128,11 +128,81 @@ async function loadSubject(subject) {
   // 修复原文中的分录表格
   fixJournalTablesInOriginal();
 
+  // 修复原文中的LaTeX公式
+  fixLatexFormulasInOriginal();
+
   // 默认滚动到第一章（等待大HTML渲染稳定）
   requestAnimationFrame(() => {
     setTimeout(() => {
       scrollToAnchor(`${subject}-第1章`);
     }, 300);
+  });
+}
+
+/* ===== 修复原文中的LaTeX公式 ===== */
+function fixLatexFormulasInOriginal() {
+  // 将 \( ... \) 格式的LaTeX公式替换为可读的HTML
+  const walker = document.createTreeWalker(
+    els.originalContent,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+  const nodesToReplace = [];
+  let node;
+  while ((node = walker.nextNode())) {
+    if (/\\\([\s\S]*?\\\)/.test(node.textContent)) {
+      nodesToReplace.push(node);
+    }
+  }
+
+  nodesToReplace.forEach((textNode) => {
+    const text = textNode.textContent;
+    const parts = text.split(/(\\\([\s\S]*?\\\))/g);
+    const fragment = document.createDocumentFragment();
+
+    parts.forEach((part) => {
+      if (part.startsWith('\\(') && part.endsWith('\\)')) {
+        // 提取公式内容
+        let formula = part.slice(2, -2).trim();
+        // 简单替换LaTeX符号为可读形式
+        formula = formula
+          .replace(/\\left\(/g, '(')
+          .replace(/\\right\)/g, ')')
+          .replace(/\\%/g, '%')
+          .replace(/\\times/g, '×')
+          .replace(/\\div/g, '÷')
+          .replace(/\\cdot/g, '·')
+          .replace(/\\leq/g, '≤')
+          .replace(/\\geq/g, '≥')
+          .replace(/\\neq/g, '≠')
+          .replace(/\\approx/g, '≈')
+          .replace(/\\rightarrow/g, '→')
+          .replace(/\\leftarrow/g, '←')
+          .replace(/\\infty/g, '∞')
+          .replace(/\\pi/g, 'π')
+          .replace(/\\alpha/g, 'α')
+          .replace(/\\beta/g, 'β')
+          .replace(/\\gamma/g, 'γ')
+          .replace(/\\delta/g, 'δ')
+          .replace(/\\sum/g, '∑')
+          .replace(/\\int/g, '∫')
+          .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '$1/$2')
+          .replace(/\^\{([^}]+)\}/g, '^$1')
+          .replace(/_/g, '')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        const span = document.createElement('span');
+        span.className = 'latex-formula';
+        span.textContent = formula;
+        fragment.appendChild(span);
+      } else {
+        fragment.appendChild(document.createTextNode(part));
+      }
+    });
+
+    textNode.parentNode.replaceChild(fragment, textNode);
   });
 }
 
