@@ -1,0 +1,12 @@
+<div id="会计-第6章-第3节-长期股权投资的减值" class="section-anchor"></div><h4 id="五长期股权投资的减值">（五）长期股权投资的减值</h4>
+<p>长期股权投资在按照规定进行核算确定其账面价值的基础上，如果存在减值迹象的，应当按照相关准则的规定计提减值准备。其中，对子公司、联营企业及合营企业的投资，应当按照《企业会计准则第8号——资产减值》的规定确定其可收回金额及应予计提的减值准备，长期股权投资的减值准备在提取以后，不允许转回。</p>
+<p>[例6-18]上市公司乙公司是甲公司的联营企业，甲公司对乙公司的长期股权投资采用权益法核算。乙公司股价于
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>24</mn></mrow><annotation encoding="application/x-tex">2 \times 24</annotation></semantics></math>
+年出现明显下跌，
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>24</mn></mrow><annotation encoding="application/x-tex">2 \times 24</annotation></semantics></math>
+年12月31日，乙公司股票价值远低于乙公司净资产的账面价值。</p>
+<p>本例中，资产的市价当期大幅度下跌，其跌幅明显高于因时间的推移或者正常使用而预计的下跌时，表明资产存在减值迹象。因此，甲公司对乙公司的该项长期股权投资存在减值迹象。此时，甲公司应当对该项长期股权投资估计可收回金额，可收回金额应当根据该项长期股权投资的公允价值减去处置费用后的净额与该项长期股权投资预计未来现金流量的现值两者之间较高者确定。如果估计的可收回金额低于长期股权投资账面</p>
+<p>价值，则甲公司应当对乙公司的该项长期股权投资计提减值准备。</p>
+
+<!-- 第6章/第4节.html -->
+<div 
