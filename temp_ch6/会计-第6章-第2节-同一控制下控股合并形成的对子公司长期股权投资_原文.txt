@@ -1,0 +1,56 @@
+<div id="会计-第6章-第2节-同一控制下控股合并形成的对子公司长期股权投资" class="section-anchor"></div><h4 id="一同一控制下控股合并形成的对子公司长期股权投资">（一）同一控制下控股合并形成的对子公司长期股权投资</h4>
+<p>同一控制下企业合并中，考虑到构成同一控制下企业合并的有关条件，即交易发生前后合并方、被合并方均在相同的最终控制方控制之下。从能够对参与合并各方在合并前及合并后均实施最终控制的一方来看，最终控制方在企业合并前及合并后能够控制的资产并没有发生变化，只是由于合并方的加入，其所控制子公司相互的层级、直接或间接关系的变化。控制的理念在会计核算中非常重要，从能够实施控制一方的角度，不管</p>
+<p>其在某些交易事项发生前后，对被投资方实施的是直接控制还是通过中间层次间接控制，只要能够实施控制，其所能够支配和运用的经济资源即是不变的，一般不能改记相关资产、负债的价值，这一理念原则上应体现在合并报表层面，即最终控制方的合并报表、合并方编制的以最终控制方作为最主要使用者的合并财务报表中均应体现从最终控制方角度自其实施控制开始，延续下来的至合并发生时有关资产、负债的应有价值。</p>
+<p>同一控制下企业合并形成的合并方对被合并方的长期股权投资，是合并方在该项交易后在其个别财务报表中应当确认的资产，其成本代表的是在被合并方所有者权益中享有的份额。理论上来讲，该项资产是合并方通过支付相关的对价取得的，其初始入账价值应当按照合并方为获取该项资产所支付对价的公允价值计量，这是从单独的法律主体角度对合并方在交易中进行的真实价值交换的反映。但是，我国企业会计准则体系中未采用这一观点，而是从最终控制方的角度，将合并方取得被合并方股权的交易作为企业集团内资产和权益的重新整合处理，不管交易本身是否是按照公平的市场价格作价，也不管交易本身是否是在最终控制方的主导下进行，只要符合同一控制下企业合并的界定，合并方通过交易取得对被合并方的长期股权投资即应按照通过该项交易取得的被合并方账面净资产的份额确认。应予关注的是，该账面净资产并非指被合并方个别财务报表中体现的有关资产、负债的价值，而是从最终控制方的角度，被合并方自其被最终控制方开始控制时开始，其所持有的资产、负债确定对于最终控制方的价值持续计算至合并日的账面价值。具体如下：</p>
+<p>（1）合并方以支付现金、转让非现金资产或承担债务方式作为合并对价的，应当在合并日按照取得被合并方所有者权益在最终控制方合并财务报表中的账面价值的份额作为长期股权投资的初始投资成本，即从最终控制方的角度，被合并方自其被最终控制方控制时开始，其所持有的资产、负债（包括最终控制方收购被合并方所形成的商誉）对于最终控制方的价值持续计算至合并日的账面价值。长期股权投资的初始投资成本与支付的现金、转让的非现金资产及所承担债务账面价值之间的差额，应当调整资本公积（资本溢价或股本溢价）；资本公积（资本溢价或股本溢价）的余额不足冲减的，依次冲减盈余公积和未分配利润。</p>
+<p>具体进行会计处理时，合并方在合并日按取得被合并方所有者权益在最终控制方合并财务报表中账面价值的份额，借记“长期股权投资”科目，按应享有被投资单位已宣告但尚未发放的现金股利或利润，借记“应收股利”科目，按支付的合并对价的账面价值，贷记有关资产或负债科目，如为贷方差额，贷记“资本公积——资本溢价或股本溢价”科目；如为借方差额，应借记“资本公积——资本溢价或股本溢价”科目，资本公积（资本溢价或股本溢价）不足冲减的，应依次借记“盈余公积”“利润分配——未分配利润”科目。</p>
+<p>（2）合并方以发行权益性证券作为合并对价的，应按合并日取得被合并方所有者权益在最终控制方合并财务报表中的账面价值的份额确认长期股权投资，按发行权益性证券的面值总额作为股本，长期股权投资初始投资成本与所发行权益性证券面值总额之间的差额，应当调整资本公积（资本溢价或股本溢价），资本公积（资本溢价或股本溢价）不足冲减的，依次冲减盈余公积和未分配利润。</p>
+<p>具体进行会计处理时，在合并日应按取得被合并方所有者权益在最终控制方合并财</p>
+<p>务报表中的账面价值的份额，借记“长期股权投资”科目，按应享有被投资单位已宣告但尚未发放的现金股利或利润，借记“应收股利”科目，按发行权益性证券的面值，贷记“股本”科目，如为贷方差额，贷记“资本公积——资本溢价或股本溢价”科目；如为借方差额，应借记“资本公积——资本溢价或股本溢价”科目，资本公积（资本溢价或股本溢价）不足冲减的，借记“盈余公积”“利润分配——未分配利润”科目。</p>
+<p>应注意的是，在计算确定同一控制下企业合并形成对子公司长期股权投资成本时，应当合理确定被合并方所有者权益在最终控制方合并财务报表中的账面价值。例如，甲公司为某一集团母公司，分别控制乙公司和丙公司。
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>23</mn></mrow><annotation encoding="application/x-tex">2 \times 23</annotation></semantics></math>
+年1月1日，甲公司从本集团外部以现金对价4000万元购入丁公司
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>80</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">80\%</annotation></semantics></math>
+股权（属于非同一控制下企业合并）并能够控制丁公司。购买日，丁公司可辨认净资产的公允价值为5000万元，账面价值为3500万元。
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">2 \times 25</annotation></semantics></math>
+年1月1日，乙公司购入甲公司所持丁公司的
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>80</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">80\%</annotation></semantics></math>
+股权，形成同一控制下的企业合并。
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>23</mn></mrow><annotation encoding="application/x-tex">2 \times 23</annotation></semantics></math>
+年1月至
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>24</mn></mrow><annotation encoding="application/x-tex">2 \times 24</annotation></semantics></math>
+年12月31日，丁公司按照购买日净资产的公允价值计算实现的净利润为1200万元；按照购买日净资产的账面价值计算实现的净利润为1500万元，无其他所有者权益变动。
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">2 \times 25</annotation></semantics></math>
+年1月1日，同一控制下企业合并的合并日，丁公司的所有者权益相对于甲公司而言的账面价值为：自
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>23</mn></mrow><annotation encoding="application/x-tex">2 \times 23</annotation></semantics></math>
+年1月1日丁公司净资产公允价值5000万元持续计算至
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>24</mn></mrow><annotation encoding="application/x-tex">2 \times 24</annotation></semantics></math>
+年12月31日的账面价值6200万元（
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5000</mn><mo>+</mo><mn>1200</mn></mrow><annotation encoding="application/x-tex">5000 + 1200</annotation></semantics></math>
+）。乙公司购入丁公司的初始投资成本为4960万元
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mo stretchy="false" form="prefix">(</mo><mn>5000</mn><mo>+</mo><mn>1200</mn><mo stretchy="false" form="postfix">)</mo><mo>×</mo><mn>80</mn><mi>%</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[ (5000 + 1200) \times 80\% ]</annotation></semantics></math>
+。如果被合并方本身编制合并财务报表的，合并方确认的被合并方的账面所有者权益也应当以其在最终控制方合并财务报表中的账面价值为基础确定。</p>
+<p>（3）通过多次交换交易，分步取得股权最终形成同一控制下控股合并的，在个别财务报表中，应当以持股比例计算的合并日应享有被合并方所有者权益在最终控制方合并财务报表中的账面价值份额，作为该项投资的初始投资成本。初始投资成本与其原长期股权投资账面价值加上合并日为取得新的股份所支付对价的现金、转让的非现金资产及所承担债务账面价值之和的差额，调整资本公积（资本溢价或股本溢价），资本公积不足冲减的，依次冲减盈余公积和未分配利润。</p>
+<p>（4）在企业合并中，合并方发生的审计、法律服务、评估咨询等中介费用以及其他相关管理费用，应当于发生时计入当期损益（管理费用）。与发行权益性工具作为合并对价直接相关的交易费用，应当冲减资本公积（资本溢价或股本溢价），资本公积（资本溢价或股本溢价）不足冲减的，依次冲减盈余公积和未分配利润。与发行债务性工具作为合并对价直接相关的交易费用，应当计入债务性工具的初始确认金额。</p>
+<p>[例6-4]甲公司于
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">2 \times 25</annotation></semantics></math>
+年4月1日自其母公司（P公司）取得B公司
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">100\%</annotation></semantics></math>
+股权并能够对B公司实施控制。该项交易中，以
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>24</mn></mrow><annotation encoding="application/x-tex">2 \times 24</annotation></semantics></math>
+年12月31日为评估基准日，B公司全部股权经评估确定的价值为15亿元，其个别财务报表中净资产账面价值为6.4亿元，以P公司最初从独立第三方取得B公司时点确定的B公司有关资产、负债价值为基础，考虑B公司后续有关交易事项的影响，
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">2 \times 25</annotation></semantics></math>
+年4月1日，B公司净资产价值为9.2亿元。甲公司用以支付购买B公司股权的对价为其账面持有的一项土地使用权，成本为7亿元，已摊销1.5亿元，评估价值为10亿元，同时该项交易中甲公司另支付现金5亿元。当日，甲公司账面所有者权益各项目的余额构成为：股本6亿元，资本公积（资本溢价）3.6亿元，盈余公积</p>
+<p>2.4亿元，未分配利润8亿元。</p>
+<p>问题：甲公司应如何确认对B公司长期股权投资的成本及其会计处理？</p>
+<p>本例中，甲公司对B公司的合并属于同一控制下企业合并。按照企业会计准则规定，该类合并中投资方应当按照合并取得应享有被合并方账面净资产的份额确认对被合并方的长期股权投资。该长期股权投资与所支付对价账面价值之间的差额应当调整资本公积，资本公积余额不足的，应当依次调整盈余公积和未分配利润。</p>
+<p>对B公司长期股权投资为9.2亿元，甲公司应进行的会计处理为：</p>
+<p>借：长期股权投资 920000000</p>
+<p>累计摊销 150000000</p>
+<p>资本公积 130000000</p>
+<p>贷：无形资产 700000000</p>
+<p>银行存款 500000000</p>
+<p>本例中应当注意以下问题：</p>
+<p>一是甲公司取得对B公司长期股权投资，应以所取得B公司账面净资产的份额确认。该账面净资产并非B公司个别财务报表中体现的6.4亿元，而应以B公司有关资产、负债在最终控制方P公司的账面价值9.2亿元为基础确定。</p>
+<p>二是在确认长期股权投资时，对于合并方为取得该项投资支付的对价原则上应以账面价值结转，无论其公允价值与账面价值是否相同，均不确认损益。取得长期股权投资的入账价值与所支付对价账面价值之间的差额应当全部调整所有者权益，本例中因甲公司资本公积的余额足够，相关差额均调整了资本公积。根据同一控制下企业合并作为企业集团内资产和权益整合的处理理念，该类交易确认时不应当产生损益。</p>
+<p>三是如果本例中在确认甲公司对B公司长期股权投资时，因该长期股权投资按照会计准则规定确定的初始投资成本与支付对价账面价值之间的差额冲减资本公积（资本溢价）时，资本公积（资本溢价）余额不足的，应当依次冲减甲公司的盈余公积和未分配利润。</p>

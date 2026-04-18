@@ -1,0 +1,95 @@
+<div id="会计-第6章-第2节-非同一控制下控股合并形成的对子公司长期股权投资" class="section-anchor"></div><h4 id="二非同一控制下控股合并形成的对子公司长期股权投资">（二）非同一控制下控股合并形成的对子公司长期股权投资</h4>
+<p>非同一控制下企业合并本质上为市场化购买，其处理原则与一般的单项资产购买有相同之处，同时亦有区别。相同之处在于因为交易本身是按照市场化原则进行的，购买方在支付有关对价后，对于该项交易中自被购买方取得的各项资产、负债应当按照其在购买日的公允价值计量；与单项资产购买的不同之处在于，企业合并是构成业务的多项资产及负债的整体购买，由于在交易价格形成过程中购买方与出售方之间议价等因素的影响，交易的最终价格与通过交易取得被购买方持有的有关单项资产、负债的公允价值之和一般会存在差异。该差异主要是源于两种情况：一是购买方支付的成本大于通过该项交易自被购买方取得的各单项可辨认资产、负债的公允价值之和，差额部分是交易各方在作价时出于对被购买业务整合获利能力等因素的考虑，即被购买业务中有关资产、负债整合在一起预期会产生高于其中单项资产、负债的价值，即为商誉的价值；二是购买方支付的成本小于该项交易中自被购买方取得的各单项资产、负债的公允价值之和，差额部分是购买方在交易作价过程中通过自身的议价能力得到的折让。应予说明的是，</p>
+<p>按照我国企业会计准则规定，对子公司长期股权投资在取得以后，在母公司账簿及个别财务报表中均体现为单项资产——长期股权投资，且采用成本法计量，上述商誉因素包含在相关对子公司长期股权投资的初始投资成本中，仅在编制合并财务报表时才会体现；负商誉的因素不影响母公司账面及个别财务报表中持有的对子公司初始投资成本的确定，在编制合并财务报表时，体现为企业合并发生当期合并利润表的损益。具体如下：</p>
+<p>（1）非同一控制下的控股合并中，购买方应当按照确定的企业合并成本作为长期股权投资的初始投资成本。企业合并成本包括购买方付出的资产、发生或承担的负债、发行的权益性证券的公允价值之和。</p>
+<p>具体进行会计处理时，对于非同一控制下控股合并形成的长期股权投资，应在购买日按企业合并成本（不含应自被投资单位收取的现金股利或利润），借记“长期股权投资”科目，按享有被投资单位已宣告但尚未发放的现金股利或利润，借记“应收股利”科目，按支付合并对价的账面价值，贷记有关资产或负债科目，按其差额，贷记或借记“资产处置损益”或“投资收益”等科目。购买方以发行权益性证券作为合并对价的，应在购买日按照发行的权益性证券的公允价值，借记“长期股权投资”科目，按照发行的权益性证券的面值总额，贷记“股本”科目，按其差额，贷记“资本公积——资本溢价或股本溢价”科目。企业发生的直接相关费用，应借记“管理费用”科目，贷记“银行存款”等科目，与发行权益性工具作为合并对价直接相关的交易费用，应当冲减资本公积（资本溢价或股本溢价），资本公积（资本溢价或股本溢价）不足冲减的，依次冲减盈余公积和未分配利润。</p>
+<p>非同一控制下控股合并涉及以库存商品等作为合并对价的，应按库存商品的公允价值，贷记“主营业务收入”或“其他业务收入”科目，并同时结转相关的成本。以公允价值计量且其变动计入其他综合收益的债权性金融资产作为合并对价的，原持有期间公允价值变动形成的其他综合收益应一并转入投资收益，借记或贷记“其他综合收益”科目，贷记或借记“投资收益”科目。</p>
+<p>在非同一控制下企业合并中，出售方与购买方可能作出合同约定，针对被购买方某些或有事项，或者特定资产或负债的某些不确定性结果，出售方给予购买方补偿，购买方因此获得补偿性资产。例如，出售方针对被购买方某或有事项产生的负债或该负债超过约定金额而引致的损失，给予购买方补偿等。购买方获得补偿性资产的，应当按照《企业会计准则第13号——或有事项》等规定，在符合或有资产确认为资产的条件（即企业基本确定能够收到且其金额能够可靠计量）时，在个别财务报表中确认补偿性资产，同时冲减长期股权投资的初始投资成本，借记“补偿性资产”科目，贷记“长期股权投资”等科目。</p>
+<p>[例6-5]A公司于
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">2 \times 25</annotation></semantics></math>
+年3月31日取得B公司
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>70</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">70\%</annotation></semantics></math>
+的股权。为核实B公司的资产价值，A公司聘请专业资产评估机构对B公司的资产进行评估，支付评估费用300万元。合并中，A公司支付的有关资产在购买日的账面价值与公允价值如表6-1所示。</p>
+<p>表6-1</p>
+<p>资产账面价值与公允价值</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">2\times 25</annotation></semantics></math>
+年3月31日</p>
+<p>单位：万元</p>
+<table>
+<tbody>
+<tr>
+<td>项目</td>
+<td>账面价值</td>
+<td>公允价值</td>
+</tr>
+<tr>
+<td>土地使用权（自用）</td>
+<td>6 000</td>
+<td>9 600</td>
+</tr>
+<tr>
+<td>专利技术</td>
+<td>2 400</td>
+<td>3 000</td>
+</tr>
+<tr>
+<td>银行存款</td>
+<td>2 400</td>
+<td>2 400</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>10 800</td>
+<td>15 000</td>
+</tr>
+</tbody>
+</table>
+<p>假定合并前A公司与B公司不存在任何关联方关系，且B公司所持有资产、负债构成业务，A公司用作合并对价的土地使用权和专利技术原价为9600万元，至控股合并发生时已累计摊销1200万元。</p>
+<p>分析：本例中因A公司与B公司在合并前不存在任何关联方关系，应作为非同一控制下的控股合并处理。</p>
+<p>A公司对于控股合并形成的对B公司的长期股权投资，应按确定的企业合并成本作为其初始投资成本。A公司应进行如下账务处理：</p>
+<p>借：长期股权投资 150000000</p>
+<p>累计摊销 12000000</p>
+<p>贷：无形资产 96000000</p>
+<p>银行存款 24000000</p>
+<p>资产处置损益 42000000</p>
+<p>借：管理费用 3000000</p>
+<p>贷：银行存款 3000000</p>
+<p>（2）通过多次交换交易，分步取得股权最终形成非同一控制下控股合并的，购买方在个别财务报表中，应当以购买日之前所持被购买方的股权投资的账面价值与购买日新增投资成本之和，作为该项投资的初始投资成本。其中，形成控股合并前对长期股权投资采用权益法核算的，购买日长期股权投资的初始投资成本，为原权益法下的账面价值加上购买日为取得新的股份所支付对价的公允价值之和，购买日之前因权益法形成的其他综合收益或其他资本公积暂时不作处理，待到处置该项投资时将与其相关的其他综合收益或其他资本公积采用与被购买方直接处置相关资产或负债相同的基础进行会计处理；形成控股合并前对股权投资采用《企业会计准则第22号——金融工具确认和计量》以公允价值计量的，原持有股权的公允价值与账面价值之间的差额以及原计入其他综合收益的累计公允价值变动应当在改按成本法核算时采用与处置原持有的股权投资相同的基础进行会计处理。原持有的股权投资指定为以公允价值计量且其变动计入其他综合收益的非交易性权益工具投资的，其公允价值与账面价值之间的差额以及原计入其他综合收益的累计公允价值变动应当直接转入留存收益。</p>
+<p>[例6-6]A公司于
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>23</mn></mrow><annotation encoding="application/x-tex">2 \times 23</annotation></semantics></math>
+年3月以2000万元取得B上市公司
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">5\%</annotation></semantics></math>
+的股权，对B公司不具有重大影响，A公司将其指定为以公允价值计量且其变动计入其他综合收益的金融资产。
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>24</mn></mrow><annotation encoding="application/x-tex">2 \times 24</annotation></semantics></math>
+年4月1日，A公司又斥资25000万元自C公司取得B公司另外
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>50</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">50\%</annotation></semantics></math>
+股权。</p>
+<p>假定A公司在取得对B公司的长期股权投资后，B公司未宣告发放现金股利。A公司原持有B公司
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">5\%</annotation></semantics></math>
+的股权于
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>24</mn></mrow><annotation encoding="application/x-tex">2\times 24</annotation></semantics></math>
+年3月31日的公允价值为2500万元（与
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>24</mn></mrow><annotation encoding="application/x-tex">2\times 24</annotation></semantics></math>
+年4月1日的公允价值相等），累计计入其他综合收益的金额为500万元。A公司与C公司不存在任何关联方关系。</p>
+<p>本例中，A公司是通过分步购买最终达到对B公司控制，因A公司与C公司不存在任何关联方关系，故形成非同一控制下控股合并。在购买日，A公司应进行如下账务处理：</p>
+<p>借：长期股权投资——投资成本 275000000</p>
+<p>贷：其他权益工具投资——成本 20000000</p>
+<p>——公允价值变动 5000000</p>
+<p>银行存款 250000000</p>
+<p>借：其他综合收益 5000000</p>
+<p>贷：利润分配——未分配利润 5000000</p>
+<p>此处转出之前计入其他综合收益的公允价值变动均计入未分配利润。实务中，影响盈余公积计提的，企业还应对盈余公积作相应调整。在本章以下例题中如影响盈余公积计提的，也应按此原则处理。</p>
+<p>假定A公司于
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>23</mn></mrow><annotation encoding="application/x-tex">2 \times 23</annotation></semantics></math>
+年3月以12000万元取得B公司
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>20</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">20\%</annotation></semantics></math>
+的股权，并能对B公司施加重大影响，采用权益法核算该项股权投资，当年度确认对B公司的投资收益450万元。
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>24</mn></mrow><annotation encoding="application/x-tex">2 \times 24</annotation></semantics></math>
+年1月，A公司又斥资15000万元自C公司取得B公司另外
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">30\%</annotation></semantics></math>
+的股权，自取得该股权起控制B公司。B公司除净利润外，无其他所有者权益变动。A公司对该项长期股权投资未计提任何减值准备。其他资料同上。购买日，A公司应进行如下账务处理：</p>
+<p>借：长期股权投资 150000000</p>
+<p>贷：银行存款 150000000</p>
+<p>购买日对B公司长期股权投资的账面价值
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>12000</mn><mo>+</mo><mn>450</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>15000</mn><mo>=</mo><mn>27450</mn></mrow><annotation encoding="application/x-tex">= (12000 + 450) + 15000 = 27450</annotation></semantics></math>
+（万元）</p>
