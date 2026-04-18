@@ -1,0 +1,58 @@
+<div id="会计-第6章-第4节-公允价值计量转为权益法核算" class="section-anchor"></div><h3 id="三公允价值计量转为权益法核算">三、公允价值计量转为权益法核算</h3>
+<p>投资企业对原持有的被投资单位的股权不具有控制、共同控制或重大影响，按照金融工具确认和计量准则进行会计处理的，因追加投资等原因导致持股比例增加，使其能够对被投资单位实施共同控制或重大影响而转按权益法核算的，应在转换日，按照原股权的公允价值加上为取得新增投资而应支付对价的公允价值，作为改按权益法核算的初始投资成本；如原投资属于分类为公允价值计量且其变动计入其他综合收益的非交易性权益工具投资，与其相关的原计入其他综合收益的累计公允价值变动转入改按权益法核算当期的留存收益，不得计入当期损益。在此基础上，比较初始投资成本与获得被投资单位共同控制或重大影响时应享有被投资单位可辨认净资产公允价值份额之间的差额，前者大于后者的，不调整长期股权投资的账面价值；前者小于后者的，调整长期股权投资的账面价值，并计入当期营业外收入。</p>
+<p>[例6-21]甲公司于
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>24</mn></mrow><annotation encoding="application/x-tex">2 \times 24</annotation></semantics></math>
+年2月取得乙公司
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">10\%</annotation></semantics></math>
+股权，对乙公司不具有控制、共同控制和重大影响，甲公司将其分类为以公允价值计量且其变动计入其他综合收益的非交易性权益工具投资的金融资产，投资成本为900万元。</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">2 \times 25</annotation></semantics></math>
+年3月1日，甲公司又以1800万元取得乙公司
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>12</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">12\%</annotation></semantics></math>
+的股权，当日乙公司可辨认净资产公允价值总额为12000万元。取得该部分股权后，按照乙公司章程规定，甲公司能够派人参与乙公司的财务和生产经营决策，对该项长期股权投资转为采用权益法核算。假定甲公司在取得对乙公司
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">10\%</annotation></semantics></math>
+的股权后，双方未发生任何内部交易，未派发现金股利或利润。除所实现净利润外，未发生其他所有者权益变动事项。
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">2 \times 25</annotation></semantics></math>
+年3月1日，甲公司对乙公司投资原
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">10\%</annotation></semantics></math>
+股权的公允价值为1300万元，原计入其他综合收益的累计公允价值变动收益为400万元。</p>
+<p>本例中，
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">2 \times 25</annotation></semantics></math>
+年3月1日，甲公司对乙公司投资原
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">10\%</annotation></semantics></math>
+股权的公允价值为1300万元，因追加投资改按权益法核算，原计入其他综合收益的累计公允价值变动收益400万元转入留存收益。</p>
+<p>甲公司对乙公司股权增持后，持股比例改为
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>22</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">22\%</annotation></semantics></math>
+，初始投资成本为3100万元
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1300</mn><mo>+</mo><mn>1800</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1300 + 1800)</annotation></semantics></math>
+，应享有乙公司可辨认净资产公允价值份额为2640万元（
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>12000</mn><mo>×</mo><mn>22</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">12000\times 22\%</annotation></semantics></math>
+），前者大于后者460万元，不调整长期股权投资的账面价值。</p>
+<p>甲公司对上述交易的账务处理如下：</p>
+<table>
+<tbody>
+<tr>
+<td>借: 长期股权投资——投资成本</td>
+<td>31 000 000</td>
+</tr>
+<tr>
+<td>贷: 银行存款</td>
+<td>18 000 000</td>
+</tr>
+<tr>
+<td>其他权益工具投资——成本</td>
+<td>9 000 000</td>
+</tr>
+<tr>
+<td>——公允价值变动</td>
+<td>4 000 000</td>
+</tr>
+<tr>
+<td>借: 其他综合收益</td>
+<td>4 000 000</td>
+</tr>
+<tr>
+<td>贷: 利润分配——未分配利润</td>
+<td>4 000 000</td>
+</tr>
+</tbody>
+</table>
