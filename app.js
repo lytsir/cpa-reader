@@ -360,7 +360,7 @@ function loadTranslate(anchorId, scrollTop) {
   }
   
   if (content) {
-    els.translateContent.innerHTML = `<div class="translate-section">${escapeHtml(content).replace(/\n/g, '<br>')}</div>`;
+    els.translateContent.innerHTML = `<div class="translate-section">${mdToHtml(content)}</div>`;
   } else {
     els.translateContent.innerHTML = `<div class="placeholder">暂无大白话解读，敬请期待</div>`;
   }
@@ -369,10 +369,29 @@ function loadTranslate(anchorId, scrollTop) {
   }
 }
 
-function escapeHtml(text) {
+function mdToHtml(text) {
+  if (!text) return '';
+  // 先转义HTML特殊字符，防止XSS
   const div = document.createElement('div');
   div.textContent = text;
-  return div.innerHTML;
+  let html = div.innerHTML;
+  // Markdown → HTML
+  html = html.replace(/^## (.*)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^### (.*)$/gm, '<h4>$1</h4>');
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/^---$/gm, '<hr>');
+  // 段落：双换行分段
+  const blocks = html.split(/\n\n+/).map(p => {
+    p = p.trim();
+    if (!p) return '';
+    if (p.startsWith('&lt;h')) return p
+      .replace(/&lt;h3&gt;/g, '<h3>').replace(/&lt;\/h3&gt;/g, '</h3>')
+      .replace(/&lt;h4&gt;/g, '<h4>').replace(/&lt;\/h4&gt;/g, '</h4>');
+    if (p.startsWith('&lt;hr&gt;')) return '<hr>';
+    p = p.replace(/\n/g, '<br>');
+    return `<p>${p}</p>`;
+  }).filter(Boolean);
+  return blocks.join('');
 }
 
 /* ===== 滚动监听 ===== */
