@@ -107,15 +107,18 @@ def hard_check(aid, text):
     # 12. 英文检查（正文）
     # 简单检测：连续2个以上英文字母（专有名词除外）
     english_words = re.findall(r'\b[a-zA-Z]{3,}\b', text)
-    # 过滤掉常见专有名词
+    # 过滤掉常见专有名词（含可持续信息披露和AI审计领域）
     allowed = ['IFRS', 'GAAP', 'SPPI', 'OCI', 'FVOCI', 'FVTPL', 'HTML', 'JSON',
-               'URL', 'API', 'ID', 'v3', 'vs', 'eg', 'i.e', 'e.g']
+               'URL', 'API', 'ID', 'v3', 'vs', 'eg', 'i.e', 'e.g',
+               'ESG', 'ESRS', 'ISSB', 'IPCC', 'CEO', 'OCR']
     illegal = [w for w in english_words if w not in allowed]
     if illegal:
         errors.append(f'英文混入：{illegal[:3]}')
     
-    # 13. 例题四块检查（正文中提到例题时）
-    if '【例' in text or '[例' in text:
+    # 13. 例题四块检查（正文中提到教材例题【例X-X】时）
+    # 只检查真正的教材例题编号，不检查子代理自编的【例题】
+    has_real_example = re.search(r'【例\d+[-－]\d+】', text) or re.search(r'\[例\d+[-－]\d+\]', text)
+    if has_real_example:
         example_blocks = ['条件翻译', '思路拆解', '数字推导', '陷阱提示']
         missing = [b for b in example_blocks if b not in text]
         if missing:
