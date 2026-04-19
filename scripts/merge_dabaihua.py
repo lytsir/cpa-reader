@@ -29,6 +29,21 @@ STAGE_MARKERS = [
     r'---\n+【?自检.*?】?.*$',
 ]
 
+# 允许保留的加粗模式（结构性标记）
+KEEP_BOLD_PATTERNS = [
+    r'条件翻译[：:]',
+    r'思路拆解[：:]',
+    r'数字推导[：:]',
+    r'陷阱提示[：:]',
+    r'表格全貌[：:]',
+    r'逐行解读[：:]',
+    r'纵向逻辑[：:]',
+    r'借[：:]',
+    r'贷[：:]',
+    r'例\d+[-－]\d+',
+    r'【例',
+]
+
 
 def clean_stages(text):
     """清理所有阶段标记"""
@@ -42,6 +57,17 @@ def clean_stages(text):
     # 清理多余空行
     text = re.sub(r'\n{3,}', '\n\n', text)
     return text.strip()
+
+
+def clean_bold(text):
+    """清理非结构性的加粗"""
+    def replacer(m):
+        content = m.group(1)
+        for pattern in KEEP_BOLD_PATTERNS:
+            if re.search(pattern, content):
+                return m.group(0)  # 保留结构性标记
+        return content  # 去除加粗，保留内容
+    return re.sub(r'\*\*([^*]+)\*\*', replacer, text)
 
 
 def extract_body(content):
@@ -60,7 +86,9 @@ def extract_body(content):
             end_idx = i
             break
     body = '\n'.join(lines[start_idx:end_idx]).strip()
-    return clean_stages(body)
+    body = clean_stages(body)
+    body = clean_bold(body)
+    return body
 
 
 def merge_files(index_path, v2_files):
