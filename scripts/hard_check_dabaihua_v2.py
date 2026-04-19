@@ -114,11 +114,41 @@ def hard_check(aid, text):
     if illegal:
         errors.append(f'英文混入：{illegal[:3]}')
     
+    # 13. 例题四块检查（正文中提到例题时）
+    if '【例' in text or '[例' in text:
+        example_blocks = ['条件翻译', '思路拆解', '数字推导', '陷阱提示']
+        missing = [b for b in example_blocks if b not in text]
+        if missing:
+            errors.append(f'例题拆解缺块：{missing}')
+    
+    # 14. 表格三块检查（正文中提到表格时）
+    if '表格全貌' in text or '逐行解读' in text:
+        table_blocks = ['表格全貌', '逐行解读', '纵向逻辑']
+        missing = [b for b in table_blocks if b not in text]
+        if missing:
+            errors.append(f'表格解读缺块：{missing}')
+    
+    # 15. 分录详解检查（正文中有分录时）
+    if '借：' in text and '贷：' in text:
+        # 检查是否有经济含义解释（借方/贷方/含义等关键词）
+        has_explanation = any(k in text for k in ['借方', '贷方', '含义', '意思是', '表示'])
+        if not has_explanation:
+            errors.append('分录缺经济含义解释')
+        # 检查科目名是否加引号
+        if re.search(r'[""][\u4e00-\u9fa5]+(?:清理|折旧|准备|损益|摊销|减值)[""]', text):
+            errors.append('分录科目名加引号')
+    
     return errors
 
 
 def main():
-    with open('metadata/会计_大白话索引.json', 'r', encoding='utf-8') as f:
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--index', default='metadata/会计_大白话索引.json', help='索引文件路径')
+    parser.add_argument('--chapter', default='会计-第', help='章节前缀过滤')
+    args = parser.parse_args()
+    
+    with open(args.index, 'r', encoding='utf-8') as f:
         index = json.load(f)
     
     total = 0
@@ -126,7 +156,7 @@ def main():
     error_details = []
     
     for aid, text in index.items():
-        if not aid.startswith('会计-第'):
+        if not aid.startswith(args.chapter):
             continue
         total += 1
         errors = hard_check(aid, text)
