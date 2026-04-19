@@ -12,6 +12,7 @@ const state = {
   currentAnchor: null,
   anchorElements: [],
   inJournalView: false,
+  loadedChapters: new Set(),
 };
 
 const els = {
@@ -83,6 +84,8 @@ async function loadSubject(subject) {
   els.translateContent.innerHTML = '<div class="placeholder">请先选择目录开始学习</div>';
   if (els.journalBack) els.journalBack.style.display = 'none';
   state.inJournalView = false;
+  state.loadedChapters.clear();
+  state.anchorElements = [];
 
   // 预加载分录索引（renderTOC需要）
   if (!state.journalData[subject]) {
@@ -96,19 +99,6 @@ async function loadSubject(subject) {
 
   renderTOC(subject);
 
-  // 加载原文
-  try {
-    const res = await fetch(`metadata/${subject}_带锚点.html?v=${Date.now()}`);
-    const htmlText = await res.text();
-    const bodyMatch = htmlText.match(/<body[^>]*>([\s\S]*)<\/body>/i);
-    const content = bodyMatch ? bodyMatch[1] : htmlText;
-    els.originalContent.innerHTML = content;
-  } catch (e) {
-    console.error('加载原文失败', e);
-    els.originalContent.innerHTML = '<div class="placeholder">加载原文失败，请检查网络后刷新</div>';
-    return;
-  }
-
   // 加载大白话索引
   try {
     const transRes = await fetch(`metadata/${subject}_大白话索引.json?v=${Date.now()}`);
@@ -117,29 +107,75 @@ async function loadSubject(subject) {
     state.translateData[subject] = {};
   }
 
-  // 获取锚点并绑定滚动监听和点击跳转
-  state.anchorElements = Array.from(els.originalContent.querySelectorAll('.section-anchor'));
-  state.currentAnchor = null;
-  els.originalContent.removeEventListener('scroll', onOriginalScroll);
-  els.originalContent.addEventListener('scroll', onOriginalScroll);
-  els.originalContent.removeEventListener('click', onOriginalClick);
-  els.originalContent.addEventListener('click', onOriginalClick);
+  // 加载第1章
+  await loadChapter(1);
+}
 
-  // 修复原文中的分录表格
-  fixJournalTablesInOriginal();
+/* ===== 按需加载章节 ===== */
+async function loadChapter(chapterNum) {
+  const subject = state.subject;
+  const chKey = `${subject}-第${chapterNum}章`;
+  
+  if (state.loadedChapters.has(chKey)) {
+    return; // 已加载，跳过
+  }
+  
+  const isFirstLoad = state.loadedChapters.size === 0;
+  if (isFirstLoad) {
+    els.originalContent.innerHTML = '<div class="placeholder">正在加载教材...</div>';
+  }
+  
+  try {
+    const res = await fetch(`metadata/${subject}_分章/${subject}_第${chapterNum}章_带锚点.html?v=${Date.now()}`);
+    if (!res.ok) {
+      console.warn(`章节 ${chapterNum} 加载失败: ${res.status}`);
+      return;
+    }
+    const htmlText = await res.text();
+    const bodyMatch = htmlText.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+    const content = bodyMatch ? bodyMatch[1] : htmlText;
+    
+    if (isFirstLoad) {
+      els.originalContent.innerHTML = content;
+    } else {
+      els.originalContent.insertAdjacentHTML('beforeend', content);
+    }
+    
+    state.loadedChapters.add(chKey);
+    
+    // 更新锚点列表
+    state.anchorElements = Array.from(els.originalContent.querySelectorAll('.section-anchor'));
+    
+    // 绑定滚动监听（只在首次加载时绑定）
+    if (isFirstLoad) {
+      state.currentAnchor = null;
+      els.originalContent.removeEventListener('scroll', onOriginalScroll);
+      els.originalContent.addEventListener('scroll', onOriginalScroll);
+      els.originalContent.removeEventListener('click', onOriginalClick);
+      els.originalContent.addEventListener('click', onOriginalClick);
+    }
+    
+    // 修复原文中的分录表格
+    fixJournalTablesInOriginal();
 
-  // 修复原文中的LaTeX公式
-  fixLatexFormulasInOriginal();
+    // 修复原文中的LaTeX公式
+    fixLatexFormulasInOriginal();
 
-  // 修复原文中的半角括号
-  fixHalfWidthBracketsInOriginal();
+    // 修复原文中的半角括号
+    fixHalfWidthBracketsInOriginal();
+    
+  } catch (e) {
+    console.error(`加载第${chapterNum}章失败`, e);
+    if (isFirstLoad) {
+      els.originalContent.innerHTML = '<div class="placeholder">加载原文失败，请检查网络后刷新</div>';
+    }
+  }
+}
 
-  // 默认滚动到第一章（等待大HTML渲染稳定）
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      scrollToAnchor(`${subject}-第1章`);
-    }, 300);
-  });
+/* ===== 获取锚点对应的章节号 ===== */
+function getChapterNumFromAnchor(anchorId) {
+  const match = anchorId.match(/第(\d+)章/);
+  return match ? parseInt(match[1]) : null;
 }
 
 /* ===== 修复原文中的半角括号 ===== */
@@ -447,7 +483,9 @@ function renderTOC(subject) {
     chItem.className = 'toc-item chapter';
     chItem.textContent = ch.title;
     chItem.dataset.anchor = ch.anchor;
-    chItem.addEventListener('click', () => {
+    chItem.addEventListener('click', async () => {
+      const chNum = getChapterNumFromAnchor(ch.anchor);
+      if (chNum) await loadChapter(chNum);
       scrollToAnchor(ch.anchor);
       highlightTOC(chItem);
       if (isMobile()) closeSidebar();
@@ -459,7 +497,9 @@ function renderTOC(subject) {
       secItem.className = 'toc-item section';
       secItem.textContent = sec.title;
       secItem.dataset.anchor = sec.anchor;
-      secItem.addEventListener('click', () => {
+      secItem.addEventListener('click', async () => {
+        const chNum = getChapterNumFromAnchor(sec.anchor);
+        if (chNum) await loadChapter(chNum);
         scrollToAnchor(sec.anchor);
         highlightTOC(secItem);
         if (isMobile()) closeSidebar();
@@ -484,14 +524,24 @@ function renderTOC(subject) {
 }
 
 /* ===== 跳转到锚点 ===== */
-function scrollToAnchor(anchor) {
+async function scrollToAnchor(anchor) {
   // 如果当前在分录视图，先切回原文视图
   if (state.inJournalView) {
     state.inJournalView = false;
     loadSubject(state.subject);
     return;
   }
-  const el = document.getElementById(anchor);
+  
+  // 如果锚点未加载，先加载对应章节
+  let el = document.getElementById(anchor);
+  if (!el) {
+    const chNum = getChapterNumFromAnchor(anchor);
+    if (chNum) {
+      await loadChapter(chNum);
+      el = document.getElementById(anchor);
+    }
+  }
+  
   if (!el) return;
   const container = els.originalContent;
   const top = el.offsetTop - container.offsetTop - 12;
