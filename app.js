@@ -562,8 +562,13 @@ function showJournalEntries(chapterAnchor) {
   state.inJournalView = true;
   if (els.journalBack) els.journalBack.style.display = 'flex';
   const data = state.journalData[state.subject] || {};
-  const chapter = data[chapterAnchor];
+  let chapter = data[chapterAnchor];
   if (!chapter) return;
+
+  // 兼容扁平数组格式（如第13章）→ 自动归一化为嵌套格式
+  if (Array.isArray(chapter)) {
+    chapter = normalizeFlatEntries(chapter, chapterAnchor);
+  }
 
   let html = `<div class="journal-view"><h2>${escapeHtml(chapter.title)}</h2>`;
 
@@ -593,6 +598,88 @@ function showJournalEntries(chapterAnchor) {
   els.translateContent.innerHTML = '<div class="placeholder">👆 点击左侧分录查看大白话解释</div>';
 }
 
+/* ===== 将扁平分录数组归一化为嵌套格式 ===== */
+function normalizeFlatEntries(flatArr, chapterAnchor) {
+  // 按 anchor_id 分组
+  const groups = {};
+  flatArr.forEach((item) => {
+    const anchor = item.anchor_id || '其他';
+    if (!groups[anchor]) groups[anchor] = [];
+    groups[anchor].push(item);
+  });
+
+  const entries = [];
+  let catIdx = 0;
+  for (const [anchor, items] of Object.entries(groups)) {
+    // 从 anchor_id 提取节标题
+    const parts = anchor.split('-');
+    const category = parts.length >= 4 ? parts.slice(3).join('-') : `分录-${++catIdx}`;
+
+    const catItems = items.map((item, idx) => {
+      // 尝试从 summary/full_text 解析借贷
+      const text = item.summary || item.full_text || '';
+      const parsed = parseJournalText(text);
+      return {
+        title: parsed.title || `分录 ${idx + 1}`,
+        debit: parsed.debit,
+        credit: parsed.credit,
+        大白话: text,
+      };
+    });
+
+    entries.push({ category, items: catItems });
+  }
+
+  return {
+    title: `${chapterAnchor.replace('会计-第', '第').replace('章', '章')} — 本章会计分录`,
+    entries,
+  };
+}
+
+/* ===== 从纯文本解析分录（尽力而为） ===== */
+function parseJournalText(text) {
+  const debit = [];
+  const credit = [];
+  let title = '';
+
+  // 尝试提取标题：找第一个句号前的内容，或前50字
+  const firstSentence = text.match(/^[^。！\n]{2,50}[。！\n]/);
+  if (firstSentence) {
+    title = firstSentence[0].trim().replace(/[。！\n]$/, '');
+  } else {
+    title = text.substring(0, 50).trim();
+  }
+
+  // 简单解析 "借：科目 金额" / "贷：科目 金额"
+  // 注意：中文分录可能有多行
+  const lines = text.split(/\n|(?=借[：:])|(?=贷[：:])/);
+  lines.forEach((line) => {
+    line = line.trim();
+    if (!line) return;
+
+    // 借方
+    const debitMatch = line.match(/借[：:]\s*([^\d\s][^\d]*?)\s+([\d,.]+(?:万|元)?)/);
+    if (debitMatch) {
+      debit.push({ 科目: debitMatch[1].trim(), 金额: debitMatch[2].trim() });
+      return;
+    }
+
+    // 贷方
+    const creditMatch = line.match(/贷[：:]\s*([^\d\s][^\d]*?)\s+([\d,.]+(?:万|元)?)/);
+    if (creditMatch) {
+      credit.push({ 科目: creditMatch[1].trim(), 金额: creditMatch[2].trim() });
+      return;
+    }
+  });
+
+  // 如果没解析到任何分录行，整条文本作为大白话，分录留空
+  if (debit.length === 0 && credit.length === 0) {
+    return { title, debit: [{ 科目: '(详见原文)', 金额: '' }], credit: [{ 科目: '(详见原文)', 金额: '' }] };
+  }
+
+  return { title, debit, credit };
+}
+
 /* ===== 渲染单个分录条目 ===== */
 function renderJournalEntry(item, entryId) {
   let debitRows = item.debit.map((d) =>
@@ -614,10 +701,17 @@ function renderJournalEntry(item, entryId) {
 
 /* ===== 显示分录大白话 ===== */
 function showJournalTranslate(entryId) {
-  const [chapterAnchor, , idxStr] = entryId.split('-');
+  const parts = entryId.split('-');
+  const chapterAnchor = parts.slice(0, 3).join('-'); // 会计-第X章
+  const idxStr = parts[parts.length - 1];
   const data = state.journalData[state.subject] || {};
-  const chapter = data[chapterAnchor];
+  let chapter = data[chapterAnchor];
   if (!chapter) return;
+
+  // 兼容扁平数组格式
+  if (Array.isArray(chapter)) {
+    chapter = normalizeFlatEntries(chapter, chapterAnchor);
+  }
 
   // 找到对应的分录条目
   let flatIdx = 0;
