@@ -376,10 +376,14 @@ function mdToHtml(text) {
   div.textContent = text;
   let html = div.innerHTML;
   // Markdown → HTML
-  html = html.replace(/^## (.*)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^### (.*)$/gm, '<h4>$1</h4>');
+  html = html.replace(/^##\s*(.*)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^###\s*(.*)$/gm, '<h4>$1</h4>');
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   html = html.replace(/^---$/gm, '<hr>');
+  // 无序列表
+  html = html.replace(/^-\s+(.*)$/gm, '<li>$1</li>');
+  // 有序列表
+  html = html.replace(/^\d+\.\s+(.*)$/gm, '<li>$1</li>');
   // 段落：双换行分段
   const blocks = html.split(/\n\n+/).map(p => {
     p = p.trim();
