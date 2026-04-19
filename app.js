@@ -88,13 +88,11 @@ async function loadSubject(subject) {
   state.anchorElements = [];
 
   // 预加载分录索引（renderTOC需要）
-  if (!state.journalData[subject]) {
-    try {
-      const jrRes = await fetch(`metadata/${encodeURIComponent(subject + '_分录索引.json')}?v=${Date.now()}`);
-      state.journalData[subject] = await jrRes.json();
-    } catch (e) {
-      state.journalData[subject] = {};
-    }
+  try {
+    const jrRes = await fetch(`metadata/${encodeURIComponent(subject + '_分录索引.json')}?v=${Date.now()}`);
+    state.journalData[subject] = await jrRes.json();
+  } catch (e) {
+    state.journalData[subject] = {};
   }
 
   renderTOC(subject);
