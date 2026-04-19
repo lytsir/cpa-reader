@@ -349,7 +349,16 @@ function fixJournalTablesInOriginal() {
 /* ===== 大白话加载 ===== */
 function loadTranslate(anchorId, scrollTop) {
   const data = state.translateData[state.subject] || {};
-  const content = data[anchorId];
+  let content = data[anchorId];
+  
+  // 如果精确匹配找不到，尝试查找子锚点并合并
+  if (!content) {
+    const childKeys = Object.keys(data).filter(k => k.startsWith(anchorId + '-'));
+    if (childKeys.length > 0) {
+      content = childKeys.map(k => data[k]).join('\n\n');
+    }
+  }
+  
   if (content) {
     els.translateContent.innerHTML = `<div class="translate-section">${escapeHtml(content).replace(/\n/g, '<br>')}</div>`;
   } else {
