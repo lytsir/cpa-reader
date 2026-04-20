@@ -1,0 +1,112 @@
+{
+  "_schema": "CPA三栏阅读器索引状态机 v1.0",
+  "_note": "索引是唯一真相，文件系统只作备份。任何工作流切换必须双向同步。",
+  "_rules": {
+    "state_definitions": {
+      "pending": "未处理",
+      "in_progress": "当前会话正在处理",
+      "draft": "已生成但自检未通过",
+      "completed": "自检全通过，已保存",
+      "failed": "自检多次不通过，需人工介入或下轮重试"
+    },
+    "state_transitions": {
+      "pending": ["in_progress"],
+      "in_progress": ["draft", "failed"],
+      "draft": ["completed", "failed", "in_progress"],
+      "completed": [],
+      "failed": ["in_progress"]
+    },
+    "session_start_priority": ["draft", "failed", "pending"],
+    "batch_size": "每次会话处理单篇（不批量），处理完自检通过后再下一篇"
+  },
+  "subjects": {
+    "会计": {
+      "chapters": {},
+      "_template": {
+        "chapter_id": "会计-第X章",
+        "chapter_title": "第X章 XXX",
+        "status": "pending",
+        "last_modified": "",
+        "file_path": "output/会计/会计-第X章-大白话.md",
+        "sections": {
+          "第Y节": {
+            "section_id": "会计-第X章-第Y节",
+            "section_title": "第Y节 XXX",
+            "status": "pending",
+            "last_modified": "",
+            "file_path": "output/会计/会计-第X章-第Y节-大白话.md",
+            "subsections": {
+              "第Y节-第Z小节": {
+                "subsection_id": "会计-第X章-第Y节-第Z小节",
+                "subsection_title": "第Z小节 XXX",
+                "status": "pending",
+                "last_modified": "",
+                "file_path": "output/会计/会计-第X章-第Y节-第Z小节-大白话.md",
+                "known_issues": [],
+                "retry_count": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "审计": { "chapters": {} },
+    "税法": { "chapters": {} },
+    "财管": { "chapters": {} },
+    "战略": { "chapters": {} },
+    "经济法": { "chapters": {} }
+  },
+  "global_issues": [],
+  "last_session_id": "session-2026-04-20",
+  "last_session_time": "2026-04-20T15:00+08:00",
+  "progress": {
+    "会计": {
+      "第1章": {
+        "status": "completed",
+        "sections": 4,
+        "files": 62,
+        "note": "结构修复+语义锚点+大白话v3+考试陷阱重写+禁用词清理全部完成"
+      },
+      "第2章": {
+        "status": "completed",
+        "sections": 5,
+        "files": 27,
+        "note": "结构修复+语义锚点+大白话v3+考试陷阱重写+禁用词清理+中文数字修复全部完成"
+      },
+      "第3章": { "status": "pending" },
+      "第4章": { "status": "pending" },
+      "第5章": { "status": "pending" },
+      "第6章": { "status": "pending" },
+      "第7章": { "status": "pending" },
+      "第8章": { "status": "pending" },
+      "第9章": { "status": "pending" },
+      "第10章": { "status": "pending" },
+      "第11章": { "status": "pending" },
+      "第12章": { "status": "pending" },
+      "第13章": { "status": "pending" },
+      "第14章": { "status": "pending" },
+      "第15章": { "status": "pending" },
+      "第16章": { "status": "pending" },
+      "第17章": { "status": "pending" },
+      "第18章": { "status": "pending" },
+      "第19章": { "status": "pending" },
+      "第20章": { "status": "pending" },
+      "第21章": { "status": "pending" },
+      "第22章": { "status": "pending" },
+      "第23章": { "status": "pending" },
+      "第24章": { "status": "pending" },
+      "第25章": { "status": "pending" },
+      "第26章": { "status": "pending" },
+      "第27章": { "status": "pending" },
+      "第28章": { "status": "pending" },
+      "第29章": { "status": "pending" },
+      "第30章": { "status": "pending" }
+    }
+  },
+  "_hard_limits": {
+    "index_max_lines": 200,
+    "index_max_bytes": 25000,
+    "retry_max": 3,
+    "batch_per_session": 1
+  }
+}
