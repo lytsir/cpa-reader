@@ -100,13 +100,16 @@
         "last_session": "2026-04-20"
       },
       "第3章": {
-        "status": "in_progress",
+        "status": "completed",
         "sections": 3,
-        "files": 17,
-        "note": "第1节8篇+第2节9篇全部完成，第3节（固定资产的处置）待处理"
+        "files": 24,
+        "note": "第1节8篇+第2节9篇+第3节7篇全部完成"
       },
       "第4章": {
-        "status": "pending"
+        "status": "in_progress",
+        "sections": 5,
+        "files": 6,
+        "note": "第1节6/20篇完成（节级+定义+不具实物形态+可辨认+非货币性+内容）"
       },
       "第5章": {
         "status": "pending"
