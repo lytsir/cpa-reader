@@ -10,13 +10,28 @@
       "failed": "自检多次不通过，需人工介入或下轮重试"
     },
     "state_transitions": {
-      "pending": ["in_progress"],
-      "in_progress": ["draft", "failed"],
-      "draft": ["completed", "failed", "in_progress"],
+      "pending": [
+        "in_progress"
+      ],
+      "in_progress": [
+        "draft",
+        "failed"
+      ],
+      "draft": [
+        "completed",
+        "failed",
+        "in_progress"
+      ],
       "completed": [],
-      "failed": ["in_progress"]
+      "failed": [
+        "in_progress"
+      ]
     },
-    "session_start_priority": ["draft", "failed", "pending"],
+    "session_start_priority": [
+      "draft",
+      "failed",
+      "pending"
+    ],
     "batch_size": "每次会话处理单篇（不批量），处理完自检通过后再下一篇"
   },
   "subjects": {
@@ -50,11 +65,21 @@
         }
       }
     },
-    "审计": { "chapters": {} },
-    "税法": { "chapters": {} },
-    "财管": { "chapters": {} },
-    "战略": { "chapters": {} },
-    "经济法": { "chapters": {} }
+    "审计": {
+      "chapters": {}
+    },
+    "税法": {
+      "chapters": {}
+    },
+    "财管": {
+      "chapters": {}
+    },
+    "战略": {
+      "chapters": {}
+    },
+    "经济法": {
+      "chapters": {}
+    }
   },
   "global_issues": [],
   "last_session_id": "session-2026-04-20",
@@ -68,39 +93,96 @@
         "note": "结构修复+语义锚点+大白话v3+考试陷阱重写+禁用词清理全部完成"
       },
       "第2章": {
-        "status": "completed",
+        "status": "in_progress",
         "sections": 5,
-        "files": 27,
-        "note": "结构修复+语义锚点+大白话v3+考试陷阱重写+禁用词清理+中文数字修复全部完成"
+        "files": 23,
+        "note": "重做中：第1节v3(6篇)+第2节v3(6篇)+第3节v3(11篇)已完成，第4节第5节待处理",
+        "last_session": "2026-04-20"
       },
-      "第3章": { "status": "pending" },
-      "第4章": { "status": "pending" },
-      "第5章": { "status": "pending" },
-      "第6章": { "status": "pending" },
-      "第7章": { "status": "pending" },
-      "第8章": { "status": "pending" },
-      "第9章": { "status": "pending" },
-      "第10章": { "status": "pending" },
-      "第11章": { "status": "pending" },
-      "第12章": { "status": "pending" },
-      "第13章": { "status": "pending" },
-      "第14章": { "status": "pending" },
-      "第15章": { "status": "pending" },
-      "第16章": { "status": "pending" },
-      "第17章": { "status": "pending" },
-      "第18章": { "status": "pending" },
-      "第19章": { "status": "pending" },
-      "第20章": { "status": "pending" },
-      "第21章": { "status": "pending" },
-      "第22章": { "status": "pending" },
-      "第23章": { "status": "pending" },
-      "第24章": { "status": "pending" },
-      "第25章": { "status": "pending" },
-      "第26章": { "status": "pending" },
-      "第27章": { "status": "pending" },
-      "第28章": { "status": "pending" },
-      "第29章": { "status": "pending" },
-      "第30章": { "status": "pending" }
+      "第3章": {
+        "status": "pending"
+      },
+      "第4章": {
+        "status": "pending"
+      },
+      "第5章": {
+        "status": "pending"
+      },
+      "第6章": {
+        "status": "pending"
+      },
+      "第7章": {
+        "status": "pending"
+      },
+      "第8章": {
+        "status": "pending"
+      },
+      "第9章": {
+        "status": "pending"
+      },
+      "第10章": {
+        "status": "pending"
+      },
+      "第11章": {
+        "status": "pending"
+      },
+      "第12章": {
+        "status": "pending"
+      },
+      "第13章": {
+        "status": "pending"
+      },
+      "第14章": {
+        "status": "pending"
+      },
+      "第15章": {
+        "status": "pending"
+      },
+      "第16章": {
+        "status": "pending"
+      },
+      "第17章": {
+        "status": "pending"
+      },
+      "第18章": {
+        "status": "pending"
+      },
+      "第19章": {
+        "status": "pending"
+      },
+      "第20章": {
+        "status": "pending"
+      },
+      "第21章": {
+        "status": "pending"
+      },
+      "第22章": {
+        "status": "pending"
+      },
+      "第23章": {
+        "status": "pending"
+      },
+      "第24章": {
+        "status": "pending"
+      },
+      "第25章": {
+        "status": "pending"
+      },
+      "第26章": {
+        "status": "pending"
+      },
+      "第27章": {
+        "status": "pending"
+      },
+      "第28章": {
+        "status": "pending"
+      },
+      "第29章": {
+        "status": "pending"
+      },
+      "第30章": {
+        "status": "pending"
+      }
     }
   },
   "_hard_limits": {
