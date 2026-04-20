@@ -100,7 +100,10 @@
         "last_session": "2026-04-20"
       },
       "第3章": {
-        "status": "pending"
+        "status": "in_progress",
+        "sections": 3,
+        "files": 5,
+        "note": "第1节v3重写进行中，已完成节级+定义+确认条件+初始计量+外购成本（5/25篇）"
       },
       "第4章": {
         "status": "pending"
