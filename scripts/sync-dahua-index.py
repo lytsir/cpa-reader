@@ -19,6 +19,7 @@ def extract_anchor_key(filename):
     从文件名提取锚点键。
     文件名格式：XXX_科目-第X章-第Y节-标题.md
     提取为：科目-第X章-第Y节-标题
+    兼容 _大白话 后缀：索引中可能存在带此后缀的旧键
     """
     # 去掉前缀数字和下划线，去掉 .md 后缀
     base = os.path.basename(filename)
@@ -27,7 +28,8 @@ def extract_anchor_key(filename):
     # 去掉前缀的数字和下划线，如 "063_"
     match = re.match(r'^\d+_(.+)$', base)
     if match:
-        return match.group(1)
+        base = match.group(1)
+    # 兼容 _大白话 后缀：如果索引中只有带后缀的键，则返回带后缀的形式
     return base
 
 
@@ -61,15 +63,22 @@ def sync_subject(subject, dry_run=False):
         with open(md_path, 'r', encoding='utf-8') as f:
             content = f.read()
 
-        if anchor_key not in index_data:
-            missing_keys.append(anchor_key)
-            print(f'  ⚠️ 索引中无此键: {anchor_key} (来自 {md_file})')
-            continue
+        # 尝试精确匹配
+        index_key = anchor_key
+        if index_key not in index_data:
+            # 尝试 _大白话 后缀
+            index_key_alt = anchor_key + '_大白话'
+            if index_key_alt in index_data:
+                index_key = index_key_alt
+            else:
+                missing_keys.append(anchor_key)
+                print(f'  ⚠️ 索引中无此键: {anchor_key} (来源 {md_file})')
+                continue
 
-        if index_data.get(anchor_key) != content:
+        if index_data.get(index_key) != content:
             if not dry_run:
-                index_data[anchor_key] = content
-            print(f'  ✅ 已更新: {anchor_key} ({len(content)} 字节)')
+                index_data[index_key] = content
+            print(f'  ✅ 已更新: {index_key} ({len(content)} 字节)')
             updated += 1
         else:
             unchanged += 1
