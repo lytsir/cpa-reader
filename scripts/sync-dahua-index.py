@@ -71,8 +71,11 @@ def sync_subject(subject, dry_run=False):
             if index_key_alt in index_data:
                 index_key = index_key_alt
             else:
-                missing_keys.append(anchor_key)
-                print(f'  ⚠️ 索引中无此键: {anchor_key} (来源 {md_file})')
+                # 新键：直接添加到索引
+                if not dry_run:
+                    index_data[anchor_key] = content
+                print(f'  ✅ 已新增: {anchor_key} ({len(content)} 字节)')
+                updated += 1
                 continue
 
         if index_data.get(index_key) != content:
